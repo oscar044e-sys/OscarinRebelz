@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+
+<html lang="es-en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rebelz Fútbol — La Visión / The Vision</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+/* ─── Reset + Root ───────────────────────────────────────── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+:root {
+–black:  #0a0a0a;
+–white:  #f0ece4;
+–red:    #d42b2b;
+–gold:   #d4a520;
+–gray:   #2a2a2a;
+–mid:    #555;
+–dim:    #888;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+background: var(–black);
+color: var(–white);
+font-family: ‘Barlow Condensed’, sans-serif;
+overflow-x: hidden;
+}
+
+/* ─── UTILITY ────────────────────────────────────────────── */
+.label {
+font-size: 0.65rem;
+letter-spacing: 0.35em;
+text-transform: uppercase;
+color: var(–dim);
+font-family: ‘Barlow Condensed’, sans-serif;
+font-weight: 600;
+}
+
+.red   { color: var(–red); }
+.gold  { color: var(–gold); }
+.white { color: var(–white); }
+.dim   { color: var(–dim); }
+
+hr.rule {
+border: none;
+border-top: 1px solid #222;
+margin: 0;
+}
+
+hr.rule-red {
+border: none;
+border-top: 2px solid var(–red);
+margin: 0;
+}
+
+/* ─── NAV ────────────────────────────────────────────────── */
+nav {
+position: fixed;
+top: 0; left: 0; right: 0;
+z-index: 100;
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 1rem 1.5rem;
+background: rgba(10,10,10,0.92);
+backdrop-filter: blur(8px);
+border-bottom: 1px solid #1a1a1a;
+}
+
+.nav-logo {
+font-family: ‘Black Han Sans’, sans-serif;
+font-size: 1.2rem;
+letter-spacing: 0.06em;
+color: var(–white);
+text-decoration: none;
+}
+
+.nav-logo span { color: var(–red); }
+
+.nav-links {
+display: flex;
+gap: 2rem;
+list-style: none;
+}
+
+.nav-links a {
+font-size: 0.72rem;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+color: var(–dim);
+text-decoration: none;
+font-weight: 600;
+transition: color 0.2s;
+}
+.nav-links a:hover { color: var(–white); }
+
+.nav-cta {
+font-size: 0.7rem;
+letter-spacing: 0.15em;
+text-transform: uppercase;
+font-weight: 700;
+color: var(–black);
+background: var(–red);
+padding: 0.45rem 1.1rem;
+text-decoration: none;
+transition: background 0.2s;
+}
+.nav-cta:hover { background: #ff3333; }
+
+/* ─── HERO ───────────────────────────────────────────────── */
+#hero {
+min-height: 100vh;
+display: grid;
+grid-template-rows: 1fr auto;
+position: relative;
+overflow: hidden;
+padding-top: 60px;
+}
+
+.hero-bg {
+position: absolute;
+inset: 0;
+background:
+linear-gradient(to bottom, rgba(10,10,10,0.3) 0%, rgba(10,10,10,0.7) 60%, var(–black) 100%);
+z-index: 1;
+}
+
+/* Simulated field photo with CSS — dark green turf gradient */
+.hero-photo {
+position: absolute;
+inset: 0;
+background:
+radial-gradient(ellipse at 50% 80%, #0d2b16 0%, #060f0a 60%, #000 100%);
+z-index: 0;
+}
+
+/* Field lines drawn with CSS */
+.hero-photo::before {
+content: ‘’;
+position: absolute;
+inset: 0;
+background-image:
+/* center circle */
+radial-gradient(circle at 50% 55%, transparent 14%, rgba(255,255,255,0.06) 14.5%, transparent 15.5%),
+/* center spot */
+radial-gradient(circle at 50% 55%, rgba(255,255,255,0.15) 0.4%, transparent 0.5%),
+/* halfway line */
+linear-gradient(to right, transparent 5%, rgba(255,255,255,0.06) 5.2%, transparent 5.4%,
+transparent 94.6%, rgba(255,255,255,0.06) 94.8%, transparent 95%),
+linear-gradient(to bottom, transparent 50%, rgba(255,255,255,0.05) 50.3%, transparent 50.6%);
+z-index: 0;
+}
+
+.hero-content {
+position: relative;
+z-index: 2;
+display: flex;
+flex-direction: column;
+justify-content: flex-end;
+padding: 0 1.5rem 3rem;
+max-width: 1200px;
+margin: 0 auto;
+width: 100%;
+min-height: calc(100vh - 60px);
+}
+
+.hero-eyebrow {
+font-size: 0.7rem;
+letter-spacing: 0.4em;
+text-transform: uppercase;
+color: var(–red);
+font-weight: 700;
+margin-bottom: 0.8rem;
+opacity: 0;
+animation: up 0.8s 0.3s ease forwards;
+}
+
+.hero-h1 {
+font-family: ‘Black Han Sans’, sans-serif;
+font-size: clamp(4.5rem, 14vw, 11rem);
+line-height: 0.88;
+letter-spacing: -0.01em;
+color: var(–white);
+text-transform: uppercase;
+opacity: 0;
+animation: up 0.8s 0.5s ease forwards;
+}
+
+.hero-h1 .stroke {
+-webkit-text-stroke: 2px var(–white);
+color: transparent;
+}
+
+.hero-h1 .red-line { color: var(–red); }
+
+.hero-sub {
+margin-top: 1.5rem;
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 1rem;
+max-width: 700px;
+opacity: 0;
+animation: up 0.8s 0.7s ease forwards;
+}
+
+.hero-sub-text {
+font-size: clamp(1rem, 2vw, 1.25rem);
+line-height: 1.55;
+color: rgba(240,236,228,0.75);
+font-style: italic;
+font-weight: 400;
+}
+
+.hero-sub-text.es { color: var(–dim); font-size: clamp(0.9rem, 1.8vw, 1.1rem); }
+
+.hero-meta {
+margin-top: 2.5rem;
+display: flex;
+align-items: center;
+gap: 1.5rem;
+opacity: 0;
+animation: up 0.8s 0.9s ease forwards;
+}
+
+.hero-location {
+font-size: 0.72rem;
+letter-spacing: 0.25em;
+text-transform: uppercase;
+color: var(–dim);
+font-weight: 600;
+}
+
+.hero-dot {
+width: 4px; height: 4px;
+border-radius: 50%;
+background: var(–red);
+flex-shrink: 0;
+}
+
+.hero-scroll {
+font-size: 0.65rem;
+letter-spacing: 0.3em;
+color: var(–mid);
+text-transform: uppercase;
+}
+
+/* ─── TICKER ─────────────────────────────────────────────── */
+.ticker-wrap {
+background: var(–red);
+padding: 0.65rem 0;
+overflow: hidden;
+white-space: nowrap;
+}
+
+.ticker-inner {
+display: inline-flex;
+animation: ticker 22s linear infinite;
+}
+
+.ticker-item {
+font-family: ‘Black Han Sans’, sans-serif;
+font-size: 0.85rem;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+color: var(–white);
+padding: 0 2.5rem;
+}
+
+.ticker-sep {
+color: rgba(255,255,255,0.4);
+padding: 0 0.5rem;
+}
+
+/* ─── STATEMENT ──────────────────────────────────────────── */
+#statement {
+padding: 6rem 1.5rem;
+max-width: 1100px;
+margin: 0 auto;
+}
+
+.stat-grid {
+display: grid;
+grid-template-columns: 1fr 2fr;
+gap: 4rem;
+align-items: start;
+}
+
+.stat-label-col {
+padding-top: 0.4rem;
+}
+
+.big-number {
+font-family: ‘Black Han Sans’, sans-serif;
+font-size: 8rem;
+line-height: 0.85;
+color: #1a1a1a;
+letter-spacing: -0.02em;
+user-select: none;
+}
+
+.stat-body {
+display: flex;
+flex-direction: column;
+gap: 2rem;
+}
+
+.pull-quote {
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: clamp(2rem, 4.5vw, 3.5rem);
+font-weight: 700;
+line-height: 1.1;
+color: var(–white);
+letter-spacing: -0.01em;
+}
+
+.pull-quote em {
+font-style: italic;
+color: var(–gold);
+}
+
+.pull-quote-es {
+font-size: clamp(1.1rem, 2vw, 1.4rem);
+font-weight: 400;
+font-style: italic;
+color: var(–dim);
+line-height: 1.6;
+border-left: 2px solid #222;
+padding-left: 1rem;
+}
+
+/* ─── HOW WE DO IT ───────────────────────────────────────── */
+#how {
+border-top: 1px solid #1a1a1a;
+padding: 5rem 1.5rem;
+max-width: 1100px;
+margin: 0 auto;
+}
+
+.how-header {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 2rem;
+margin-bottom: 4rem;
+align-items: end;
+}
+
+.how-title {
+font-family: ‘Black Han Sans’, sans-serif;
+font-size: clamp(2.5rem, 6vw, 5rem);
+line-height: 0.9;
+letter-spacing: 0.01em;
+}
+
+.how-title .outline {
+-webkit-text-stroke: 1.5px var(–white);
+color: transparent;
+display: block;
+}
+
+.how-intro {
+font-size: clamp(1rem, 1.8vw, 1.15rem);
+line-height: 1.7;
+color: var(–dim);
+font-weight: 400;
+}
+
+.how-intro strong { color: var(–white); font-weight: 600; }
+
+/* Revenue blocks */
+.revenue-grid {
+display: grid;
+grid-template-columns: repeat(5, 1fr);
+border: 1px solid #1a1a1a;
+}
+
+.rev-block {
+padding: 1.8rem 1.2rem;
+border-right: 1px solid #1a1a1a;
+position: relative;
+transition: background 0.25s;
+}
+
+.rev-block:last-child { border-right: none; }
+.rev-block:hover { background: #111; }
+
+.rev-block::before {
+content: ‘’;
+position: absolute;
+top: 0; left: 0; right: 0;
+height: 3px;
+background: var(–accent, var(–white));
+transform: scaleX(0);
+transform-origin: left;
+transition: transform 0.35s ease;
+}
+
+.rev-block:hover::before { transform: scaleX(1); }
+
+.rev-night {
+font-family: ‘Black Han Sans’, sans-serif;
+font-size: 1.6rem;
+color: var(–accent, var(–white));
+letter-spacing: 0.03em;
+margin-bottom: 0.2rem;
+}
+
+.rev-day {
+font-size: 0.62rem;
+letter-spacing: 0.25em;
+text-transform: uppercase;
+color: var(–dim);
+font-weight: 600;
+margin-bottom: 0.8rem;
+}
+
+.rev-name {
+font-size: 0.88rem;
+font-weight: 700;
+color: var(–white);
+line-height: 1.3;
+margin-bottom: 0.5rem;
+}
+
+.rev-fee {
+font-size: 0.78rem;
+color: var(–dim);
+line-height: 1.5;
+}
+
+.rev-annual {
+margin-top: 1rem;
+padding-top: 0.8rem;
+border-top: 1px solid #1a1a1a;
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 0.72rem;
+letter-spacing: 0.1em;
+color: var(–accent, var(–white));
+font-weight: 700;
+text-transform: uppercase;
+}
+
+/* ─── FREE SECTION ───────────────────────────────────────── */
+#free {
+background: var(–gray);
+padding: 5rem 1.5rem;
+margin: 4rem 0;
+position: relative;
+overflow: hidden;
+}
+
+#free::before {
+content: ‘FREE’;
+font-family: ‘Black Han Sans’, sans-serif;
+font-size: 28vw;
+position: absolute;
+right: -2vw;
+top: 50%;
+transform: translateY(-50%);
+color: rgba(255,255,255,0.03);
+pointer-events: none;
+letter-spacing: -0.03em;
+line-height: 1;
+}
+
+.free-inner {
+max-width: 1100px;
+margin: 0 auto;
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 4rem;
+align-items: center;
+position: relative;
+z-index: 1;
+}
+
+.free-left {}
+
+.free-kicker {
+font-size: 0.68rem;
+letter-spacing: 0.4em;
+text-transform: uppercase;
+color: var(–gold);
+font-weight: 700;
+margin-bottom: 0.8rem;
+}
+
+.free-title {
+font-family: ‘Black Han Sans’, sans-serif;
+font-size: clamp(2.5rem, 5vw, 4.5rem);
+line-height: 0.92;
+color: var(–white);
+margin-bottom: 1.5rem;
+}
+
+.free-body {
+font-size: 1.05rem;
+line-height: 1.75;
+color: rgba(240,236,228,0.7);
+font-weight: 400;
+margin-bottom: 1rem;
+}
+
+.free-body-es {
+font-size: 0.9rem;
+line-height: 1.7;
+color: var(–dim);
+font-style: italic;
+}
+
+.free-right {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 1px;
+background: #333;
+}
+
+.free-item {
+background: #2a2a2a;
+padding: 1.5rem 1.2rem;
+}
+
+.fi-icon { font-size: 1.6rem; margin-bottom: 0.6rem; display: block; }
+
+.fi-title {
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 0.95rem;
+font-weight: 700;
+color: var(–white);
+text-transform: uppercase;
+letter-spacing: 0.05em;
+margin-bottom: 0.3rem;
+}
+
+.fi-body {
+font-size: 0.8rem;
+color: var(–dim);
+line-height: 1.6;
+font-weight: 400;
+}
+
+/* ─── FUND ───────────────────────────────────────────────── */
+#fund {
+padding: 6rem 1.5rem;
+max-width: 1100px;
+margin: 0 auto;
+}
+
+.fund-grid {
+display: grid;
+grid-template-columns: 1.2fr 1fr;
+gap: 5rem;
+align-items: center;
+}
+
+.fund-left {}
+
+.fund-tag {
+display: inline-flex;
+align-items: center;
+gap: 0.5rem;
+background: var(–red);
+padding: 0.25rem 0.7rem;
+font-size: 0.65rem;
+letter-spacing: 0.25em;
+text-transform: uppercase;
+font-weight: 700;
+color: var(–white);
+margin-bottom: 1.2rem;
+}
+
+.fund-title {
+font-family: ‘Black Han Sans’, sans-serif;
+font-size: clamp(2.2rem, 5vw, 4rem);
+line-height: 0.92;
+color: var(–white);
+margin-bottom: 1.5rem;
+}
+
+.fund-title .block {
+display: block;
+color: transparent;
+-webkit-text-stroke: 1.5px var(–white);
+}
+
+.fund-body {
+font-size: 1rem;
+line-height: 1.8;
+color: rgba(240,236,228,0.7);
+margin-bottom: 0.8rem;
+font-weight: 400;
+}
+
+.fund-body strong { color: var(–white); font-weight: 600; }
+
+.fund-right {}
+
+.fund-stat {
+padding: 1.8rem 0;
+border-bottom: 1px solid #1a1a1a;
+}
+
+.fund-stat:first-child { border-top: 1px solid #1a1a1a; }
+
+.fs-num {
+font-family: ‘Black Han Sans’, sans-serif;
+font-size: 3rem;
+color: var(–gold);
+line-height: 1;
+margin-bottom: 0.3rem;
+}
+
+.fs-label {
+font-size: 0.78rem;
+font-weight: 700;
+color: var(–white);
+text-transform: uppercase;
+letter-spacing: 0.1em;
+margin-bottom: 0.2rem;
+}
+
+.fs-sub {
+font-size: 0.78rem;
+color: var(–dim);
+line-height: 1.5;
+font-weight: 400;
+}
+
+/* ─── TEAM ───────────────────────────────────────────────── */
+#team {
+background: #0d0d0d;
+border-top: 1px solid #1a1a1a;
+padding: 5rem 1.5rem;
+}
+
+.team-inner { max-width: 1100px; margin: 0 auto; }
+
+.team-hdr {
+display: flex;
+align-items: flex-end;
+justify-content: space-between;
+margin-bottom: 3rem;
+flex-wrap: wrap;
+gap: 1rem;
+}
+
+.team-title {
+font-family: ‘Black Han Sans’, sans-serif;
+font-size: clamp(2rem, 5vw, 4rem);
+line-height: 0.9;
+}
+
+.team-intro-text {
+max-width: 380px;
+font-size: 0.92rem;
+line-height: 1.7;
+color: var(–dim);
+font-weight: 400;
+}
+
+.team-cards {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 1px;
+background: #1a1a1a;
+}
+
+.tc {
+background: var(–black);
+padding: 2rem 1.5rem;
+position: relative;
+overflow: hidden;
+transition: background 0.25s;
+}
+
+.tc:hover { background: #0f0f0f; }
+
+.tc::after {
+content: ‘’;
+position: absolute;
+bottom: 0; left: 0; right: 0;
+height: 2px;
+background: var(–tc-color, var(–red));
+transform: scaleX(0);
+transform-origin: left;
+transition: transform 0.4s ease;
+}
+
+.tc:hover::after { transform: scaleX(1); }
+
+.tc-glyph {
+font-size: 2rem;
+display: block;
+margin-bottom: 1.2rem;
+filter: grayscale(0.2);
+}
+
+.tc-role {
+font-size: 0.6rem;
+letter-spacing: 0.3em;
+text-transform: uppercase;
+color: var(–tc-color, var(–red));
+font-weight: 700;
+margin-bottom: 0.4rem;
+}
+
+.tc-name {
+font-family: ‘Black Han Sans’, sans-serif;
+font-size: 1.4rem;
+color: var(–white);
+line-height: 1;
+margin-bottom: 0.8rem;
+}
+
+.tc-desc {
+font-size: 0.82rem;
+line-height: 1.7;
+color: var(–dim);
+font-weight: 400;
+margin-bottom: 1rem;
+}
+
+.tc-gift {
+font-size: 0.72rem;
+line-height: 1.85;
+color: var(–tc-color, var(–red));
+font-weight: 600;
+text-transform: uppercase;
+letter-spacing: 0.05em;
+opacity: 0.8;
+}
+
+/* ─── PHASES ─────────────────────────────────────────────── */
+#phases {
+padding: 5rem 1.5rem;
+max-width: 1100px;
+margin: 0 auto;
+}
+
+.phases-hdr {
+margin-bottom: 3rem;
+}
+
+.phases-title {
+font-family: ‘Black Han Sans’, sans-serif;
+font-size: clamp(2rem, 5vw, 4rem);
+line-height: 0.9;
+margin-bottom: 0.5rem;
+}
+
+.phases-sub {
+font-size: 0.9rem;
+color: var(–dim);
+font-weight: 400;
+line-height: 1.6;
+}
+
+.phase-row {
+display: grid;
+grid-template-columns: 140px 1fr;
+border-top: 1px solid #1a1a1a;
+}
+
+.phase-row:last-child { border-bottom: 1px solid #1a1a1a; }
+
+.phase-num-col {
+padding: 2rem 1rem 2rem 0;
+display: flex;
+flex-direction: column;
+justify-content: center;
+border-right: 1px solid #1a1a1a;
+}
+
+.phase-num {
+font-family: ‘Black Han Sans’, sans-serif;
+font-size: 0.8rem;
+letter-spacing: 0.15em;
+color: var(–ph-color, var(–dim));
+}
+
+.phase-tag {
+font-size: 0.6rem;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+color: var(–dim);
+margin-top: 0.2rem;
+}
+
+.phase-items {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 0;
+}
+
+.pi {
+padding: 2rem 1.5rem;
+border-right: 1px solid #1a1a1a;
+transition: background 0.2s;
+}
+
+.pi:last-child { border-right: none; }
+.pi:hover { background: #0d0d0d; }
+
+.pi-name {
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 1rem;
+font-weight: 700;
+color: var(–white);
+text-transform: uppercase;
+letter-spacing: 0.05em;
+margin-bottom: 0.5rem;
+}
+
+.pi-desc {
+font-size: 0.8rem;
+color: var(–dim);
+line-height: 1.65;
+font-weight: 400;
+}
+
+/* ─── CLOSING ────────────────────────────────────────────── */
+#closing {
+background: var(–red);
+padding: 6rem 1.5rem;
+text-align: center;
+position: relative;
+overflow: hidden;
+}
+
+#closing::before {
+content: ‘★’;
+font-size: 40vw;
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+color: rgba(255,255,255,0.04);
+pointer-events: none;
+line-height: 1;
+}
+
+.closing-inner {
+max-width: 800px;
+margin: 0 auto;
+position: relative;
+z-index: 1;
+}
+
+.closing-en {
+font-family: ‘Black Han Sans’, sans-serif;
+font-size: clamp(2.5rem, 6vw, 5rem);
+line-height: 0.92;
+color: var(–white);
+margin-bottom: 1.2rem;
+}
+
+.closing-es {
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: clamp(1.1rem, 2.5vw, 1.8rem);
+font-weight: 400;
+font-style: italic;
+color: rgba(255,255,255,0.7);
+margin-bottom: 2.5rem;
+line-height: 1.5;
+}
+
+.closing-meta {
+font-size: 0.7rem;
+letter-spacing: 0.3em;
+text-transform: uppercase;
+color: rgba(255,255,255,0.5);
+line-height: 2;
+}
+
+/* ─── FOOTER ─────────────────────────────────────────────── */
+footer {
+background: var(–black);
+border-top: 1px solid #1a1a1a;
+padding: 2rem 1.5rem;
+display: flex;
+align-items: center;
+justify-content: space-between;
+flex-wrap: wrap;
+gap: 1rem;
+}
+
+.footer-logo {
+font-family: ‘Black Han Sans’, sans-serif;
+font-size: 1rem;
+color: var(–white);
+letter-spacing: 0.05em;
+}
+
+.footer-logo span { color: var(–red); }
+
+.footer-links {
+display: flex;
+gap: 1.5rem;
+list-style: none;
+}
+
+.footer-links a {
+font-size: 0.65rem;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+color: var(–dim);
+text-decoration: none;
+transition: color 0.2s;
+}
+
+.footer-links a:hover { color: var(–white); }
+
+.footer-address {
+font-size: 0.65rem;
+letter-spacing: 0.15em;
+color: var(–dim);
+text-transform: uppercase;
+}
+
+/* ─── ANIMATIONS ─────────────────────────────────────────── */
+@keyframes up {
+from { opacity: 0; transform: translateY(20px); }
+to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ticker {
+from { transform: translateX(0); }
+to   { transform: translateX(-50%); }
+}
+
+.reveal {
+opacity: 0;
+transform: translateY(24px);
+transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.vis { opacity: 1; transform: translateY(0); }
+
+/* ─── EDIT BAR ───────────────────────────────────────────── */
+#edit-bar {
+position: fixed;
+bottom: 0; left: 0; right: 0;
+z-index: 200;
+background: #1a1a1a;
+border-top: 1px solid #333;
+padding: 0.55rem 1.5rem;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 1rem;
+transition: background 0.3s;
+}
+
+#edit-hint {
+font-size: 0.68rem;
+letter-spacing: 0.12em;
+color: var(–dim);
+font-family: ‘Barlow Condensed’, sans-serif;
+font-weight: 600;
+}
+
+#edit-btn {
+font-family: ‘Barlow Condensed’, sans-serif;
+font-weight: 700;
+font-size: 0.68rem;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+color: var(–black);
+background: var(–white);
+border: none;
+padding: 0.4rem 1rem;
+cursor: pointer;
+transition: background 0.2s, color 0.2s;
+white-space: nowrap;
+}
+#edit-btn:hover { background: var(–red); color: var(–white); }
+
+[contenteditable=“true”] {
+outline: 1px dashed rgba(212,165,32,0.5);
+outline-offset: 2px;
+cursor: text;
+border-radius: 1px;
+transition: outline 0.15s;
+}
+[contenteditable=“true”]:focus {
+outline: 2px solid var(–gold);
+background: rgba(212,165,32,0.04);
+}
+[contenteditable=“false”] { outline: none; cursor: inherit; }
+
+/* Extra bottom padding so content clears the edit bar */
+body { padding-bottom: 48px; }
+@media (max-width: 900px) {
+.stat-grid       { grid-template-columns: 1fr; gap: 2rem; }
+.how-header      { grid-template-columns: 1fr; }
+.revenue-grid    { grid-template-columns: 1fr 1fr; }
+.free-inner      { grid-template-columns: 1fr; }
+.fund-grid       { grid-template-columns: 1fr; gap: 2rem; }
+.team-cards      { grid-template-columns: 1fr 1fr; }
+.phase-items     { grid-template-columns: 1fr; }
+.hero-sub        { grid-template-columns: 1fr; }
+.big-number      { font-size: 5rem; }
+.nav-links       { display: none; }
+}
+
+@media (max-width: 580px) {
+.team-cards      { grid-template-columns: 1fr; }
+.revenue-grid    { grid-template-columns: 1fr; }
+.free-right      { grid-template-columns: 1fr; }
+}
+</style>
+
+</head>
+<body>
+
+<!-- ─── EDIT BAR ──────────────────────────────────────────── -->
+
+<div id="edit-bar">
+  <span id="edit-hint">Locked for presenting — click EDIT TEXT to make changes</span>
+  <button id="edit-btn" onclick="toggleEdit()">EDIT TEXT</button>
+</div>
+
+<!-- ─── NAV ─────────────────────────────────────────────── -->
+
+<nav>
+  <a href="#hero" class="nav-logo">REBELZ<span>★</span>FÚTBOL</a>
+  <ul class="nav-links">
+    <li><a href="#how">How We Do It</a></li>
+    <li><a href="#fund">The Fund</a></li>
+    <li><a href="#team">El Team</a></li>
+    <li><a href="#phases">Phases</a></li>
+  </ul>
+  <a href="#closing" class="nav-cta">Get Involved</a>
+</nav>
+
+<!-- ─── HERO ─────────────────────────────────────────────── -->
+
+<section id="hero">
+  <div class="hero-photo"></div>
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Fort Worth, TX &nbsp;·&nbsp; Est. 2026 &nbsp;·&nbsp; 1201 E Maddox Ave</div>
+    <h1 class="hero-h1">
+      <span class="stroke">REBELZ</span><br>
+      <span class="red-line">FÚTBOL</span>
+    </h1>
+    <div class="hero-sub">
+      <p class="hero-sub-text">
+        Where the field becomes something bigger than the game.
+      </p>
+      <p class="hero-sub-text es">
+        Donde el campo es más que el juego.
+      </p>
+    </div>
+    <div class="hero-meta">
+      <span class="hero-location">Free Pickup Fridays · 7PM</span>
+      <div class="hero-dot"></div>
+      <span class="hero-location">Leagues Starting April 2026</span>
+      <div class="hero-dot"></div>
+      <span class="hero-scroll">↓ Scroll</span>
+    </div>
+  </div>
+</section>
+
+<!-- ─── TICKER ────────────────────────────────────────────── -->
+
+<div class="ticker-wrap" aria-hidden="true">
+  <div class="ticker-inner">
+    <span class="ticker-item">FREE 4 EVERYONE <span class="ticker-sep">★</span></span>
+    <span class="ticker-item">RETAS PARA TODOS <span class="ticker-sep">★</span></span>
+    <span class="ticker-item">COMMUNITY FIRST <span class="ticker-sep">★</span></span>
+    <span class="ticker-item">LA COMUNIDAD PRIMERO <span class="ticker-sep">★</span></span>
+    <span class="ticker-item">BRING YOUR TEAM OR COMO SOLO <span class="ticker-sep">★</span></span>
+    <span class="ticker-item">FORT WORTH FÚTBOL <span class="ticker-sep">★</span></span>
+    <span class="ticker-item">FREE 4 EVERYONE <span class="ticker-sep">★</span></span>
+    <span class="ticker-item">RETAS PARA TODOS <span class="ticker-sep">★</span></span>
+    <span class="ticker-item">COMMUNITY FIRST <span class="ticker-sep">★</span></span>
+    <span class="ticker-item">LA COMUNIDAD PRIMERO <span class="ticker-sep">★</span></span>
+    <span class="ticker-item">BRING YOUR TEAM OR COMO SOLO <span class="ticker-sep">★</span></span>
+    <span class="ticker-item">FORT WORTH FÚTBOL <span class="ticker-sep">★</span></span>
+  </div>
+</div>
+
+<!-- ─── STATEMENT ─────────────────────────────────────────── -->
+
+<section id="statement">
+  <div class="stat-grid">
+    <div class="stat-label-col">
+      <div class="label" style="margin-bottom:0.5rem">The Dream / El Sueño</div>
+      <div class="big-number">01</div>
+    </div>
+    <div class="stat-body reveal">
+      <p class="pull-quote">
+        A soccer field where your zip code doesn't determine your access. Where your body is welcomed. Where <em>your culture is the center.</em>
+      </p>
+      <p class="pull-quote-es">
+        Un campo de fútbol donde tu código postal no determina tu acceso. Donde tu cuerpo es bienvenido. Donde tu cultura es el centro.
+      </p>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- ─── HOW WE DO IT ──────────────────────────────────────── -->
+
+<section id="how">
+  <div class="how-header reveal">
+    <div>
+      <div class="label" style="margin-bottom:0.8rem">Cómo lo hacemos / How We Do It</div>
+      <h2 class="how-title">
+        THE<br>
+        <span class="outline">MONEY</span><br>
+        PART
+      </h2>
+    </div>
+    <p class="how-intro">
+      Leagues and tournaments generate the revenue. That revenue funds <strong>free programming</strong>, the <strong>health clinic</strong>, and the <strong>mutual aid fund</strong>. No grants required at launch. No gatekeepers.
+      <br><br>
+      <em style="color:var(--dim);font-size:0.85rem;">Las ligas generan los ingresos. Esos ingresos financian lo gratuito.</em>
+    </p>
+  </div>
+
+  <div class="revenue-grid reveal">
+    <div class="rev-block" style="--accent:#2a5298">
+      <div class="rev-night">MON</div>
+      <div class="rev-day">Lunes</div>
+      <div class="rev-name">Men's 5v5 Futsal</div>
+      <div class="rev-fee">$65 / player<br>8 teams · 1 ref</div>
+      <div class="rev-annual">$10,400 / yr</div>
+    </div>
+    <div class="rev-block" style="--accent:#6b46c1">
+      <div class="rev-night">TUE</div>
+      <div class="rev-day">Martes</div>
+      <div class="rev-name">Coed 5v5 Futsal</div>
+      <div class="rev-fee">$65 / player<br>8 teams · 1 ref</div>
+      <div class="rev-annual">$10,400 / yr</div>
+    </div>
+    <div class="rev-block" style="--accent:#1a6635">
+      <div class="rev-night">WED</div>
+      <div class="rev-day">Miércoles</div>
+      <div class="rev-name">Men's 5v5 Small Goals</div>
+      <div class="rev-fee">$65 / player<br>8 teams · 1 ref</div>
+      <div class="rev-annual">$10,400 / yr</div>
+    </div>
+    <div class="rev-block" style="--accent:#d4a520">
+      <div class="rev-night">THU</div>
+      <div class="rev-day">Jueves</div>
+      <div class="rev-name">Cash Prize League</div>
+      <div class="rev-fee">$500 / team<br>$3K prize · 2 refs</div>
+      <div class="rev-annual" style="color:var(--gold)">$4,000 net / yr</div>
+    </div>
+    <div class="rev-block" style="--accent:#d42b2b">
+      <div class="rev-night">FRI</div>
+      <div class="rev-day">Viernes</div>
+      <div class="rev-name">Outdoor 7v7 Mens</div>
+      <div class="rev-fee">$65 / player<br>8 teams · 1 ref</div>
+      <div class="rev-annual">$14,560 / yr</div>
+    </div>
+  </div>
+
+  <div style="display:flex; justify-content:flex-end; margin-top:1rem; align-items:center; gap:1rem; flex-wrap:wrap;">
+    <span class="label">Total annual league revenue (Phase 1)</span>
+    <span style="font-family:'Black Han Sans',sans-serif; font-size:2rem; color:var(--white);">$49,760</span>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- ─── FREE SECTION ──────────────────────────────────────── -->
+
+<section id="free">
+  <div class="free-inner">
+    <div class="free-left reveal">
+      <div class="free-kicker">Non-Negotiable / No Negociable</div>
+      <h2 class="free-title">FREE IS THE<br>POINT.</h2>
+      <p class="free-body">
+        The leagues cross-subsidize everything free. That's the model. Revenue from competitive play funds open access for everyone — no registration, no fee, no barrier.
+      </p>
+      <p class="free-body-es">
+        Las ligas financian lo gratuito. Ese es el modelo.
+      </p>
+    </div>
+    <div class="free-right reveal">
+      <div class="free-item">
+        <span class="fi-icon">⚽</span>
+        <div class="fi-title">Free Pickup Fridays</div>
+        <p class="fi-body">No sign-up. No fee. Show up and play. Friday 7PM. Forever.</p>
+      </div>
+      <div class="free-item">
+        <span class="fi-icon">🩺</span>
+        <div class="fi-title">Health Clinics</div>
+        <p class="fi-body">Free screenings, mental health access, body literacy. The field as a site of healing.</p>
+      </div>
+      <div class="free-item">
+        <span class="fi-icon">👟</span>
+        <div class="fi-title">Youth Academy</div>
+        <p class="fi-body">Skills development. Coaching certs for community members. No cost to participate.</p>
+      </div>
+      <div class="free-item">
+        <span class="fi-icon">⬡</span>
+        <div class="fi-title">Mutual Aid Fund</div>
+        <p class="fi-body">Rent. Food. Emergency support. 10% of net profit. Back to the neighborhood.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FUND ───────────────────────────────────────────────── -->
+
+<section id="fund">
+  <div class="fund-grid">
+    <div class="fund-left reveal">
+      <div class="fund-tag">Non-Negotiable ★</div>
+      <h2 class="fund-title">
+        THE FUND<br>
+        <span class="block">IS THE</span>
+        WHY.
+      </h2>
+      <p class="fund-body">
+        Most organizations treat mutual aid as a nice-to-have — something that happens when there's money left over. <strong>We built it into the structure from day one.</strong>
+      </p>
+      <p class="fund-body">
+        The community fund isn't what we do with profit. It's why we create it. Housed in the nonprofit arm. Protected by design. Governed by the people it serves.
+      </p>
+      <p class="fund-body" style="color:var(--dim); font-size:0.85rem; font-style:italic;">
+        El fondo no es lo que hacemos con las ganancias. Es la razón por la que las creamos.
+      </p>
+    </div>
+    <div class="fund-right reveal">
+      <div class="fund-stat">
+        <div class="fs-num">10%</div>
+        <div class="fs-label">Of Net Profit</div>
+        <div class="fs-sub">Set aside every season. No exceptions. Deployed back into the community.</div>
+      </div>
+      <div class="fund-stat">
+        <div class="fs-num">LLC<br>+ 501c3</div>
+        <div class="fs-label">Dual-Track Structure</div>
+        <div class="fs-sub">Revenue arm funds free programming. Nonprofit arm protects the fund. Both serve the mission.</div>
+      </div>
+      <div class="fund-stat">
+        <div class="fs-num">0</div>
+        <div class="fs-label">Gatekeepers</div>
+        <div class="fs-sub">Disbursement decisions made by community members. The people who need it most decide how it flows.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- ─── TEAM ───────────────────────────────────────────────── -->
+
+<section id="team">
+  <div class="team-inner">
+    <div class="team-hdr reveal">
+      <div>
+        <div class="label" style="margin-bottom:0.6rem">Los Constructores</div>
+        <h2 class="team-title">THE<br>BUILDERS.</h2>
+      </div>
+      <p class="team-intro-text">
+        Four people. Four gifts. One field. The most powerful thing you can build is something your community actually needs.
+      </p>
+    </div>
+    <div class="team-cards">
+      <div class="tc" style="--tc-color:#d4a520">
+        <span class="tc-glyph">🌀</span>
+        <div class="tc-role">Community Organizer</div>
+        <h3 class="tc-name">The Storyteller</h3>
+        <p class="tc-desc">Before you build anything, you must first listen. And listening is its own form of architecture.</p>
+        <div class="tc-gift">Gift: Makes people feel seen<br>Move: Door knocks → manifestos</div>
+      </div>
+      <div class="tc" style="--tc-color:#2a5298">
+        <span class="tc-glyph">⚙️</span>
+        <div class="tc-role">Math & Mechanics</div>
+        <h3 class="tc-name">The Wizard</h3>
+        <p class="tc-desc">A heart rooted in love, a mind that sees systems — and builds them to free people, not constrain them.</p>
+        <div class="tc-gift">Gift: Makes complexity legible<br>Move: Numbers → poems</div>
+      </div>
+      <div class="tc" style="--tc-color:#1a6635">
+        <span class="tc-glyph">🌿</span>
+        <div class="tc-role">Architecture & Space</div>
+        <h3 class="tc-name">The Dreamer</h3>
+        <p class="tc-desc">Dreams of a world connected and thriving amongst nature. Every space is a decision that reveals what we value.</p>
+        <div class="tc-gift">Gift: Sees what could be<br>Move: Blueprint → ecosystem</div>
+      </div>
+      <div class="tc" style="--tc-color:#d42b2b">
+        <span class="tc-glyph">💊</span>
+        <div class="tc-role">Health Justice</div>
+        <h3 class="tc-name">The Advocate</h3>
+        <p class="tc-desc">Knows what it means when a body has been denied care. Knows healing happens in community, on fields, through joy.</p>
+        <div class="tc-gift">Gift: Political + personal at once<br>Move: Clinic → commons</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- ─── PHASES ────────────────────────────────────────────── -->
+
+<section id="phases">
+  <div class="phases-hdr reveal">
+    <div class="label" style="margin-bottom:0.6rem">La Hoja de Ruta / The Roadmap</div>
+    <h2 class="phases-title">THREE<br>PHASES.</h2>
+    <p class="phases-sub">One trajectory. From a field in Fort Worth to a model that communities can replicate, adapt, and make their own.</p>
+  </div>
+
+  <div class="phase-row reveal">
+    <div class="phase-num-col" style="--ph-color:var(--gold)">
+      <div class="phase-num">01</div>
+      <div class="phase-tag">Foundation<br>2026</div>
+    </div>
+    <div class="phase-items">
+      <div class="pi">
+        <div class="pi-name">Weekday Leagues</div>
+        <p class="pi-desc">Mon–Fri, 7–11PM. Five nights, five formats. The revenue engine.</p>
+      </div>
+      <div class="pi">
+        <div class="pi-name">Free Pickup Fridays</div>
+        <p class="pi-desc">No registration. No fee. Show up and play. Cross-subsidized by league revenue.</p>
+      </div>
+      <div class="pi">
+        <div class="pi-name">Rebelz Clinic</div>
+        <p class="pi-desc">Free health screenings on-site. MD, RD, PT — community-embedded care.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase-row reveal">
+    <div class="phase-num-col" style="--ph-color:var(--white)">
+      <div class="phase-num">02</div>
+      <div class="phase-tag">Expansion<br>2027</div>
+    </div>
+    <div class="phase-items">
+      <div class="pi">
+        <div class="pi-name">Weekend Divisions</div>
+        <p class="pi-desc">8AM–10PM Sat & Sun. Youth, women's, 40+, competitive open. 14 hours of field time.</p>
+      </div>
+      <div class="pi">
+        <div class="pi-name">Mutual Aid Live</div>
+        <p class="pi-desc">Fund fully operational. Rent, food, emergency support flowing back to the neighborhood.</p>
+      </div>
+      <div class="pi">
+        <div class="pi-name">Gym & Membership</div>
+        <p class="pi-desc">Access, jerseys, exclusive classes, seasonal tournaments. Revenue diversification.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase-row reveal">
+    <div class="phase-num-col" style="--ph-color:var(--red)">
+      <div class="phase-num">03</div>
+      <div class="phase-tag">Legacy<br>2028+</div>
+    </div>
+    <div class="phase-items">
+      <div class="pi">
+        <div class="pi-name">Youth Academy</div>
+        <p class="pi-desc">Skills development. Coaching certs for community members. Pathways that didn't exist before.</p>
+      </div>
+      <div class="pi">
+        <div class="pi-name">Physical Facility</div>
+        <p class="pi-desc">A permanent home. Bodega, café, community space, field — all under one roof.</p>
+      </div>
+      <div class="pi">
+        <div class="pi-name">Replicable Model</div>
+        <p class="pi-desc">Documentation, open-source tools, and relationships to help other communities build this too.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CLOSING ───────────────────────────────────────────── -->
+
+<section id="closing">
+  <div class="closing-inner reveal">
+    <h2 class="closing-en">
+      THE FIELD<br>IS OURS.
+    </h2>
+    <p class="closing-es">
+      Bring your team or como solo.<br>
+      1201 E Maddox Ave, Fort Worth, TX<br>
+      Free Pickup — Viernes / Fridays 7PM
+    </p>
+    <div class="closing-meta">
+      Rebelz Fútbol Community &nbsp;★&nbsp; Fort Worth, Texas &nbsp;★&nbsp; Est. 2026<br>
+      Season 1 Starts April 27, 2026 &nbsp;★&nbsp; 6 Weeks Before The World Cup
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ────────────────────────────────────────────── -->
+
+<footer>
+  <div class="footer-logo">REBELZ<span>★</span>FÚTBOL</div>
+  <ul class="footer-links">
+    <li><a href="#how">Leagues</a></li>
+    <li><a href="#free">Free Programs</a></li>
+    <li><a href="#fund">Mutual Aid</a></li>
+    <li><a href="#team">El Team</a></li>
+  </ul>
+  <div class="footer-address">1201 E Maddox Ave &nbsp;·&nbsp; Fort Worth TX</div>
+</footer>
+
+<script>
+// ── Scroll reveal ──────────────────────────────────────────
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('vis'), i * 60);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── Edit mode ──────────────────────────────────────────────
+// Selectors for all editable text — skips structural/nav/icon elements
+const EDITABLE_SELECTORS = [
+  'h1','h2','h3','h4',
+  'p','blockquote',
+  '.hero-eyebrow','.hero-sub-text','.hero-location',
+  '.pull-quote','.pull-quote-es',
+  '.label','.section-label',
+  '.rev-night','.rev-day','.rev-name','.rev-fee','.rev-annual',
+  '.free-kicker','.free-title','.free-body','.free-body-es',
+  '.fi-title','.fi-body',
+  '.fund-tag','.fund-title','.fund-body',
+  '.fs-num','.fs-label','.fs-sub',
+  '.how-title','.how-intro',
+  '.tc-role','.tc-name','.tc-desc','.tc-gift',
+  '.pi-name','.pi-desc',
+  '.phase-num','.phase-tag',
+  '.phases-title','.phases-sub',
+  '.closing-en','.closing-es','.closing-meta',
+  '.footer-logo','.footer-address',
+  '.stat-grid .pull-quote',
+  '.team-intro-text','.team-title',
+  '.ticker-item',
+];
+
+let editMode = false; // starts locked
+
+function setEditMode(on) {
+  editMode = on;
+  document.querySelectorAll('[data-editable]').forEach(el => {
+    el.contentEditable = on ? 'true' : 'false';
+  });
+  const bar   = document.getElementById('edit-bar');
+  const btn   = document.getElementById('edit-btn');
+  const hint  = document.getElementById('edit-hint');
+  bar.style.background = on ? '#1a1a1a' : '#0f2a18';
+  btn.textContent = on ? 'LOCK ✓' : 'EDIT TEXT';
+  hint.textContent = on
+    ? 'Click any text to edit — all changes stay in your browser'
+    : 'Locked for presenting — click EDIT TEXT to make changes';
+}
+
+function toggleEdit() {
+  setEditMode(!editMode);
+}
+
+// Tag all editable nodes
+function initEditable() {
+  const seen = new Set();
+  EDITABLE_SELECTORS.forEach(sel => {
+    document.querySelectorAll(sel).forEach(el => {
+      // Skip nav links, the edit bar itself, ticker (cosmetic only)
+      if (el.closest('#edit-bar') || el.closest('nav ul') || el.closest('.ticker-wrap')) return;
+      if (seen.has(el)) return;
+      seen.add(el);
+      el.dataset.editable = '1';
+      el.contentEditable = 'false';
+      // Prevent Enter from inserting <div> blocks
+      el.addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); document.execCommand('insertLineBreak'); }
+      });
+    });
+  });
+}
+
+// Cmd/Ctrl+S hint
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+    e.preventDefault();
+    const hint = document.getElementById('edit-hint');
+    const prev = hint.textContent;
+    hint.textContent = '✓ To save permanently: File → Save Page As... (Webpage, Complete)';
+    hint.style.color = '#5dba7a';
+    setTimeout(() => { hint.textContent = prev; hint.style.color = ''; }, 3500);
+  }
+});
+
+initEditable();
+</script>
+
+</body>
+</html>
