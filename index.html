@@ -1,2037 +1,378 @@
-<!DOCTYPE html>
-
-<html lang="es-en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rebelz Fútbol — La Visión / The Vision</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
-<style>
-
-/* ─── Reset + Root ───────────────────────────────────────── */
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-:root {
-–black:  #0a0a0a;
-–white:  #f0ece4;
-–red:    #d42b2b;
-–gold:   #d4a520;
-–gray:   #2a2a2a;
-–mid:    #555;
-–dim:    #888;
-}
-
-html { scroll-behavior: smooth; }
-
-body {
-background: var(–black);
-color: var(–white);
-font-family: ‘Barlow Condensed’, sans-serif;
-overflow-x: hidden;
-}
-
-/* ─── UTILITY ────────────────────────────────────────────── */
-.label {
-font-size: 0.65rem;
-letter-spacing: 0.35em;
-text-transform: uppercase;
-color: var(–dim);
-font-family: ‘Barlow Condensed’, sans-serif;
-font-weight: 600;
-}
-
-.red   { color: var(–red); }
-.gold  { color: var(–gold); }
-.white { color: var(–white); }
-.dim   { color: var(–dim); }
-
-hr.rule {
-border: none;
-border-top: 1px solid #222;
-margin: 0;
-}
-
-hr.rule-red {
-border: none;
-border-top: 2px solid var(–red);
-margin: 0;
-}
-
-/* ─── NAV ────────────────────────────────────────────────── */
-nav {
-position: fixed;
-top: 0; left: 0; right: 0;
-z-index: 100;
-display: flex;
-align-items: center;
-justify-content: space-between;
-padding: 1rem 1.5rem;
-background: rgba(10,10,10,0.92);
-backdrop-filter: blur(8px);
-border-bottom: 1px solid #1a1a1a;
-}
-
-.nav-logo {
-font-family: ‘Black Han Sans’, sans-serif;
-font-size: 1.2rem;
-letter-spacing: 0.06em;
-color: var(–white);
-text-decoration: none;
-}
-
-.nav-logo span { color: var(–red); }
-
-.nav-links {
-display: flex;
-gap: 2rem;
-list-style: none;
-}
-
-.nav-links a {
-font-size: 0.72rem;
-letter-spacing: 0.2em;
-text-transform: uppercase;
-color: var(–dim);
-text-decoration: none;
-font-weight: 600;
-transition: color 0.2s;
-}
-.nav-links a:hover { color: var(–white); }
-
-.nav-cta {
-font-size: 0.7rem;
-letter-spacing: 0.15em;
-text-transform: uppercase;
-font-weight: 700;
-color: var(–black);
-background: var(–red);
-padding: 0.45rem 1.1rem;
-text-decoration: none;
-transition: background 0.2s;
-}
-.nav-cta:hover { background: #ff3333; }
-
-/* ─── HERO ───────────────────────────────────────────────── */
-#hero {
-min-height: 100vh;
-display: grid;
-grid-template-rows: 1fr auto;
-position: relative;
-overflow: hidden;
-padding-top: 60px;
-}
-
-.hero-bg {
-position: absolute;
-inset: 0;
-background:
-linear-gradient(to bottom, rgba(10,10,10,0.3) 0%, rgba(10,10,10,0.7) 60%, var(–black) 100%);
-z-index: 1;
-}
-
-/* Simulated field photo with CSS — dark green turf gradient */
-.hero-photo {
-position: absolute;
-inset: 0;
-background:
-radial-gradient(ellipse at 50% 80%, #0d2b16 0%, #060f0a 60%, #000 100%);
-z-index: 0;
-}
-
-/* Field lines drawn with CSS */
-.hero-photo::before {
-content: ‘’;
-position: absolute;
-inset: 0;
-background-image:
-/* center circle */
-radial-gradient(circle at 50% 55%, transparent 14%, rgba(255,255,255,0.06) 14.5%, transparent 15.5%),
-/* center spot */
-radial-gradient(circle at 50% 55%, rgba(255,255,255,0.15) 0.4%, transparent 0.5%),
-/* halfway line */
-linear-gradient(to right, transparent 5%, rgba(255,255,255,0.06) 5.2%, transparent 5.4%,
-transparent 94.6%, rgba(255,255,255,0.06) 94.8%, transparent 95%),
-linear-gradient(to bottom, transparent 50%, rgba(255,255,255,0.05) 50.3%, transparent 50.6%);
-z-index: 0;
-}
-
-.hero-content {
-position: relative;
-z-index: 2;
-display: flex;
-flex-direction: column;
-justify-content: flex-end;
-padding: 0 1.5rem 3rem;
-max-width: 1200px;
-margin: 0 auto;
-width: 100%;
-min-height: calc(100vh - 60px);
-}
-
-.hero-eyebrow {
-font-size: 0.7rem;
-letter-spacing: 0.4em;
-text-transform: uppercase;
-color: var(–red);
-font-weight: 700;
-margin-bottom: 0.8rem;
-opacity: 0;
-animation: up 0.8s 0.3s ease forwards;
-}
-
-.hero-h1 {
-font-family: ‘Black Han Sans’, sans-serif;
-font-size: clamp(4.5rem, 14vw, 11rem);
-line-height: 0.88;
-letter-spacing: -0.01em;
-color: var(–white);
-text-transform: uppercase;
-opacity: 0;
-animation: up 0.8s 0.5s ease forwards;
-}
-
-.hero-h1 .stroke {
--webkit-text-stroke: 2px var(–white);
-color: transparent;
-}
-
-.hero-h1 .red-line { color: var(–red); }
-
-.hero-sub {
-margin-top: 1.5rem;
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 1rem;
-max-width: 700px;
-opacity: 0;
-animation: up 0.8s 0.7s ease forwards;
-}
-
-.hero-sub-text {
-font-size: clamp(1rem, 2vw, 1.25rem);
-line-height: 1.55;
-color: rgba(240,236,228,0.75);
-font-style: italic;
-font-weight: 400;
-}
-
-.hero-sub-text.es { color: var(–dim); font-size: clamp(0.9rem, 1.8vw, 1.1rem); }
-
-.hero-meta {
-margin-top: 2.5rem;
-display: flex;
-align-items: center;
-gap: 1.5rem;
-opacity: 0;
-animation: up 0.8s 0.9s ease forwards;
-}
-
-.hero-location {
-font-size: 0.72rem;
-letter-spacing: 0.25em;
-text-transform: uppercase;
-color: var(–dim);
-font-weight: 600;
-}
-
-.hero-dot {
-width: 4px; height: 4px;
-border-radius: 50%;
-background: var(–red);
-flex-shrink: 0;
-}
-
-.hero-scroll {
-font-size: 0.65rem;
-letter-spacing: 0.3em;
-color: var(–mid);
-text-transform: uppercase;
-}
-
-/* ─── TICKER ─────────────────────────────────────────────── */
-.ticker-wrap {
-background: var(–red);
-padding: 0.65rem 0;
-overflow: hidden;
-white-space: nowrap;
-}
-
-.ticker-inner {
-display: inline-flex;
-animation: ticker 22s linear infinite;
-}
-
-.ticker-item {
-font-family: ‘Black Han Sans’, sans-serif;
-font-size: 0.85rem;
-letter-spacing: 0.12em;
-text-transform: uppercase;
-color: var(–white);
-padding: 0 2.5rem;
-}
-
-.ticker-sep {
-color: rgba(255,255,255,0.4);
-padding: 0 0.5rem;
-}
-
-/* ─── STATEMENT ──────────────────────────────────────────── */
-#statement {
-padding: 6rem 1.5rem;
-max-width: 1100px;
-margin: 0 auto;
-}
-
-.stat-grid {
-display: grid;
-grid-template-columns: 1fr 2fr;
-gap: 4rem;
-align-items: start;
-}
-
-.stat-label-col {
-padding-top: 0.4rem;
-}
-
-.big-number {
-font-family: ‘Black Han Sans’, sans-serif;
-font-size: 8rem;
-line-height: 0.85;
-color: #1a1a1a;
-letter-spacing: -0.02em;
-user-select: none;
-}
-
-.stat-body {
-display: flex;
-flex-direction: column;
-gap: 2rem;
-}
-
-.pull-quote {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: clamp(2rem, 4.5vw, 3.5rem);
-font-weight: 700;
-line-height: 1.1;
-color: var(–white);
-letter-spacing: -0.01em;
-}
-
-.pull-quote em {
-font-style: italic;
-color: var(–gold);
-}
-
-.pull-quote-es {
-font-size: clamp(1.1rem, 2vw, 1.4rem);
-font-weight: 400;
-font-style: italic;
-color: var(–dim);
-line-height: 1.6;
-border-left: 2px solid #222;
-padding-left: 1rem;
-}
-
-/* ─── HOW WE DO IT ───────────────────────────────────────── */
-#how {
-border-top: 1px solid #1a1a1a;
-padding: 5rem 1.5rem;
-max-width: 1100px;
-margin: 0 auto;
-}
-
-.how-header {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 2rem;
-margin-bottom: 4rem;
-align-items: end;
-}
-
-.how-title {
-font-family: ‘Black Han Sans’, sans-serif;
-font-size: clamp(2.5rem, 6vw, 5rem);
-line-height: 0.9;
-letter-spacing: 0.01em;
-}
-
-.how-title .outline {
--webkit-text-stroke: 1.5px var(–white);
-color: transparent;
-display: block;
-}
-
-.how-intro {
-font-size: clamp(1rem, 1.8vw, 1.15rem);
-line-height: 1.7;
-color: var(–dim);
-font-weight: 400;
-}
-
-.how-intro strong { color: var(–white); font-weight: 600; }
-
-/* Revenue blocks */
-.revenue-grid {
-display: grid;
-grid-template-columns: repeat(5, 1fr);
-border: 1px solid #1a1a1a;
-}
-
-.rev-block {
-padding: 1.8rem 1.2rem;
-border-right: 1px solid #1a1a1a;
-position: relative;
-transition: background 0.25s;
-}
-
-.rev-block:last-child { border-right: none; }
-.rev-block:hover { background: #111; }
-
-.rev-block::before {
-content: ‘’;
-position: absolute;
-top: 0; left: 0; right: 0;
-height: 3px;
-background: var(–accent, var(–white));
-transform: scaleX(0);
-transform-origin: left;
-transition: transform 0.35s ease;
-}
-
-.rev-block:hover::before { transform: scaleX(1); }
-
-.rev-night {
-font-family: ‘Black Han Sans’, sans-serif;
-font-size: 1.6rem;
-color: var(–accent, var(–white));
-letter-spacing: 0.03em;
-margin-bottom: 0.2rem;
-}
-
-.rev-day {
-font-size: 0.62rem;
-letter-spacing: 0.25em;
-text-transform: uppercase;
-color: var(–dim);
-font-weight: 600;
-margin-bottom: 0.8rem;
-}
-
-.rev-name {
-font-size: 0.88rem;
-font-weight: 700;
-color: var(–white);
-line-height: 1.3;
-margin-bottom: 0.5rem;
-}
-
-.rev-fee {
-font-size: 0.78rem;
-color: var(–dim);
-line-height: 1.5;
-}
-
-.rev-annual {
-margin-top: 1rem;
-padding-top: 0.8rem;
-border-top: 1px solid #1a1a1a;
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 0.72rem;
-letter-spacing: 0.1em;
-color: var(–accent, var(–white));
-font-weight: 700;
-text-transform: uppercase;
-}
-
-/* ─── FREE SECTION ───────────────────────────────────────── */
-#free {
-background: var(–gray);
-padding: 5rem 1.5rem;
-margin: 4rem 0;
-position: relative;
-overflow: hidden;
-}
-
-#free::before {
-content: ‘FREE’;
-font-family: ‘Black Han Sans’, sans-serif;
-font-size: 28vw;
-position: absolute;
-right: -2vw;
-top: 50%;
-transform: translateY(-50%);
-color: rgba(255,255,255,0.03);
-pointer-events: none;
-letter-spacing: -0.03em;
-line-height: 1;
-}
-
-.free-inner {
-max-width: 1100px;
-margin: 0 auto;
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 4rem;
-align-items: center;
-position: relative;
-z-index: 1;
-}
-
-.free-left {}
-
-.free-kicker {
-font-size: 0.68rem;
-letter-spacing: 0.4em;
-text-transform: uppercase;
-color: var(–gold);
-font-weight: 700;
-margin-bottom: 0.8rem;
-}
-
-.free-title {
-font-family: ‘Black Han Sans’, sans-serif;
-font-size: clamp(2.5rem, 5vw, 4.5rem);
-line-height: 0.92;
-color: var(–white);
-margin-bottom: 1.5rem;
-}
-
-.free-body {
-font-size: 1.05rem;
-line-height: 1.75;
-color: rgba(240,236,228,0.7);
-font-weight: 400;
-margin-bottom: 1rem;
-}
-
-.free-body-es {
-font-size: 0.9rem;
-line-height: 1.7;
-color: var(–dim);
-font-style: italic;
-}
-
-.free-right {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 1px;
-background: #333;
-}
-
-.free-item {
-background: #2a2a2a;
-padding: 1.5rem 1.2rem;
-}
-
-.fi-icon { font-size: 1.6rem; margin-bottom: 0.6rem; display: block; }
-
-.fi-title {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 0.95rem;
-font-weight: 700;
-color: var(–white);
-text-transform: uppercase;
-letter-spacing: 0.05em;
-margin-bottom: 0.3rem;
-}
-
-.fi-body {
-font-size: 0.8rem;
-color: var(–dim);
-line-height: 1.6;
-font-weight: 400;
-}
-
-/* ─── FUND ───────────────────────────────────────────────── */
-#fund {
-padding: 6rem 1.5rem;
-max-width: 1100px;
-margin: 0 auto;
-}
-
-.fund-grid {
-display: grid;
-grid-template-columns: 1.2fr 1fr;
-gap: 5rem;
-align-items: center;
-}
-
-.fund-left {}
-
-.fund-tag {
-display: inline-flex;
-align-items: center;
-gap: 0.5rem;
-background: var(–red);
-padding: 0.25rem 0.7rem;
-font-size: 0.65rem;
-letter-spacing: 0.25em;
-text-transform: uppercase;
-font-weight: 700;
-color: var(–white);
-margin-bottom: 1.2rem;
-}
-
-.fund-title {
-font-family: ‘Black Han Sans’, sans-serif;
-font-size: clamp(2.2rem, 5vw, 4rem);
-line-height: 0.92;
-color: var(–white);
-margin-bottom: 1.5rem;
-}
-
-.fund-title .block {
-display: block;
-color: transparent;
--webkit-text-stroke: 1.5px var(–white);
-}
-
-.fund-body {
-font-size: 1rem;
-line-height: 1.8;
-color: rgba(240,236,228,0.7);
-margin-bottom: 0.8rem;
-font-weight: 400;
-}
-
-.fund-body strong { color: var(–white); font-weight: 600; }
-
-.fund-right {}
-
-.fund-stat {
-padding: 1.8rem 0;
-border-bottom: 1px solid #1a1a1a;
-}
-
-.fund-stat:first-child { border-top: 1px solid #1a1a1a; }
-
-.fs-num {
-font-family: ‘Black Han Sans’, sans-serif;
-font-size: 3rem;
-color: var(–gold);
-line-height: 1;
-margin-bottom: 0.3rem;
-}
-
-.fs-label {
-font-size: 0.78rem;
-font-weight: 700;
-color: var(–white);
-text-transform: uppercase;
-letter-spacing: 0.1em;
-margin-bottom: 0.2rem;
-}
-
-.fs-sub {
-font-size: 0.78rem;
-color: var(–dim);
-line-height: 1.5;
-font-weight: 400;
-}
-
-/* ─── TEAM ───────────────────────────────────────────────── */
-#team {
-background: #0d0d0d;
-border-top: 1px solid #1a1a1a;
-padding: 5rem 1.5rem;
-}
-
-.team-inner { max-width: 1100px; margin: 0 auto; }
-
-.team-hdr {
-display: flex;
-align-items: flex-end;
-justify-content: space-between;
-margin-bottom: 3rem;
-flex-wrap: wrap;
-gap: 1rem;
-}
-
-.team-title {
-font-family: ‘Black Han Sans’, sans-serif;
-font-size: clamp(2rem, 5vw, 4rem);
-line-height: 0.9;
-}
-
-.team-intro-text {
-max-width: 380px;
-font-size: 0.92rem;
-line-height: 1.7;
-color: var(–dim);
-font-weight: 400;
-}
-
-.team-cards {
-display: grid;
-grid-template-columns: repeat(4, 1fr);
-gap: 1px;
-background: #1a1a1a;
-}
-
-.tc {
-background: var(–black);
-padding: 2rem 1.5rem;
-position: relative;
-overflow: hidden;
-transition: background 0.25s;
-}
-
-.tc:hover { background: #0f0f0f; }
-
-.tc::after {
-content: ‘’;
-position: absolute;
-bottom: 0; left: 0; right: 0;
-height: 2px;
-background: var(–tc-color, var(–red));
-transform: scaleX(0);
-transform-origin: left;
-transition: transform 0.4s ease;
-}
-
-.tc:hover::after { transform: scaleX(1); }
-
-.tc-glyph {
-font-size: 2rem;
-display: block;
-margin-bottom: 1.2rem;
-filter: grayscale(0.2);
-}
-
-.tc-role {
-font-size: 0.6rem;
-letter-spacing: 0.3em;
-text-transform: uppercase;
-color: var(–tc-color, var(–red));
-font-weight: 700;
-margin-bottom: 0.4rem;
-}
-
-.tc-name {
-font-family: ‘Black Han Sans’, sans-serif;
-font-size: 1.4rem;
-color: var(–white);
-line-height: 1;
-margin-bottom: 0.8rem;
-}
-
-.tc-desc {
-font-size: 0.82rem;
-line-height: 1.7;
-color: var(–dim);
-font-weight: 400;
-margin-bottom: 1rem;
-}
-
-.tc-gift {
-font-size: 0.72rem;
-line-height: 1.85;
-color: var(–tc-color, var(–red));
-font-weight: 600;
-text-transform: uppercase;
-letter-spacing: 0.05em;
-opacity: 0.8;
-}
-
-/* ─── PHASES ─────────────────────────────────────────────── */
-#phases {
-padding: 5rem 1.5rem;
-max-width: 1100px;
-margin: 0 auto;
-}
-
-.phases-hdr {
-margin-bottom: 3rem;
-}
-
-.phases-title {
-font-family: ‘Black Han Sans’, sans-serif;
-font-size: clamp(2rem, 5vw, 4rem);
-line-height: 0.9;
-margin-bottom: 0.5rem;
-}
-
-.phases-sub {
-font-size: 0.9rem;
-color: var(–dim);
-font-weight: 400;
-line-height: 1.6;
-}
-
-.phase-row {
-display: grid;
-grid-template-columns: 140px 1fr;
-border-top: 1px solid #1a1a1a;
-}
-
-.phase-row:last-child { border-bottom: 1px solid #1a1a1a; }
-
-.phase-num-col {
-padding: 2rem 1rem 2rem 0;
-display: flex;
-flex-direction: column;
-justify-content: center;
-border-right: 1px solid #1a1a1a;
-}
-
-.phase-num {
-font-family: ‘Black Han Sans’, sans-serif;
-font-size: 0.8rem;
-letter-spacing: 0.15em;
-color: var(–ph-color, var(–dim));
-}
-
-.phase-tag {
-font-size: 0.6rem;
-letter-spacing: 0.2em;
-text-transform: uppercase;
-color: var(–dim);
-margin-top: 0.2rem;
-}
-
-.phase-items {
-display: grid;
-grid-template-columns: repeat(3, 1fr);
-gap: 0;
-}
-
-.pi {
-padding: 2rem 1.5rem;
-border-right: 1px solid #1a1a1a;
-transition: background 0.2s;
-}
-
-.pi:last-child { border-right: none; }
-.pi:hover { background: #0d0d0d; }
-
-.pi-name {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 1rem;
-font-weight: 700;
-color: var(–white);
-text-transform: uppercase;
-letter-spacing: 0.05em;
-margin-bottom: 0.5rem;
-}
-
-.pi-desc {
-font-size: 0.8rem;
-color: var(–dim);
-line-height: 1.65;
-font-weight: 400;
-}
-
-/* ─── CLOSING ────────────────────────────────────────────── */
-#closing {
-background: var(–red);
-padding: 6rem 1.5rem;
-text-align: center;
-position: relative;
-overflow: hidden;
-}
-
-#closing::before {
-content: ‘★’;
-font-size: 40vw;
-position: absolute;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
-color: rgba(255,255,255,0.04);
-pointer-events: none;
-line-height: 1;
-}
-
-.closing-inner {
-max-width: 800px;
-margin: 0 auto;
-position: relative;
-z-index: 1;
-}
-
-.closing-en {
-font-family: ‘Black Han Sans’, sans-serif;
-font-size: clamp(2.5rem, 6vw, 5rem);
-line-height: 0.92;
-color: var(–white);
-margin-bottom: 1.2rem;
-}
-
-.closing-es {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: clamp(1.1rem, 2.5vw, 1.8rem);
-font-weight: 400;
-font-style: italic;
-color: rgba(255,255,255,0.7);
-margin-bottom: 2.5rem;
-line-height: 1.5;
-}
-
-.closing-meta {
-font-size: 0.7rem;
-letter-spacing: 0.3em;
-text-transform: uppercase;
-color: rgba(255,255,255,0.5);
-line-height: 2;
-}
-
-/* ─── FOOTER ─────────────────────────────────────────────── */
-footer {
-background: var(–black);
-border-top: 1px solid #1a1a1a;
-padding: 2rem 1.5rem;
-display: flex;
-align-items: center;
-justify-content: space-between;
-flex-wrap: wrap;
-gap: 1rem;
-}
-
-.footer-logo {
-font-family: ‘Black Han Sans’, sans-serif;
-font-size: 1rem;
-color: var(–white);
-letter-spacing: 0.05em;
-}
-
-.footer-logo span { color: var(–red); }
-
-.footer-links {
-display: flex;
-gap: 1.5rem;
-list-style: none;
-}
-
-.footer-links a {
-font-size: 0.65rem;
-letter-spacing: 0.2em;
-text-transform: uppercase;
-color: var(–dim);
-text-decoration: none;
-transition: color 0.2s;
-}
-
-.footer-links a:hover { color: var(–white); }
-
-.footer-address {
-font-size: 0.65rem;
-letter-spacing: 0.15em;
-color: var(–dim);
-text-transform: uppercase;
-}
-
-/* ─── ANIMATIONS ─────────────────────────────────────────── */
-@keyframes up {
-from { opacity: 0; transform: translateY(20px); }
-to   { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes ticker {
-from { transform: translateX(0); }
-to   { transform: translateX(-50%); }
-}
-
-.reveal {
-opacity: 0;
-transform: translateY(24px);
-transition: opacity 0.7s ease, transform 0.7s ease;
-}
-
-.reveal.vis { opacity: 1; transform: translateY(0); }
-
-/* ─── STYLE EDITOR PANEL ─────────────────────────────────── */
-#style-panel {
-position: fixed;
-bottom: 48px; right: 0;
-width: 280px;
-background: #111;
-border-left: 1px solid #2a2a2a;
-border-top: 1px solid #2a2a2a;
-z-index: 199;
-transform: translateX(100%);
-transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
-max-height: calc(100vh - 108px);
-overflow-y: auto;
-scrollbar-width: thin;
-scrollbar-color: #333 #111;
-}
-
-#style-panel.open { transform: translateX(0); }
-
-.sp-header {
-padding: 1rem 1.2rem 0.8rem;
-border-bottom: 1px solid #1a1a1a;
-display: flex;
-align-items: center;
-justify-content: space-between;
-position: sticky;
-top: 0;
-background: #111;
-z-index: 1;
-}
-
-.sp-title {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 0.72rem;
-font-weight: 700;
-letter-spacing: 0.25em;
-text-transform: uppercase;
-color: var(–white);
-}
-
-.sp-close {
-background: none;
-border: none;
-color: var(–dim);
-cursor: pointer;
-font-size: 1.1rem;
-line-height: 1;
-padding: 0 0.2rem;
-transition: color 0.2s;
-}
-.sp-close:hover { color: var(–white); }
-
-.sp-section {
-padding: 0.8rem 1.2rem;
-border-bottom: 1px solid #1a1a1a;
-}
-
-.sp-section-title {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 0.6rem;
-font-weight: 700;
-letter-spacing: 0.3em;
-text-transform: uppercase;
-color: var(–dim);
-margin-bottom: 0.8rem;
-}
-
-.sp-row {
-display: flex;
-align-items: center;
-justify-content: space-between;
-margin-bottom: 0.65rem;
-gap: 0.8rem;
-}
-
-.sp-row:last-child { margin-bottom: 0; }
-
-.sp-label {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 0.78rem;
-font-weight: 600;
-color: rgba(240,236,228,0.7);
-flex: 1;
-white-space: nowrap;
-}
-
-.sp-label span {
-display: block;
-font-size: 0.6rem;
-color: var(–dim);
-font-weight: 400;
-margin-top: 0.1rem;
-}
-
-.sp-controls {
-display: flex;
-align-items: center;
-gap: 0.5rem;
-}
-
-/* Color swatch + picker */
-.color-swatch {
-width: 28px; height: 28px;
-border-radius: 2px;
-border: 1px solid #333;
-cursor: pointer;
-flex-shrink: 0;
-position: relative;
-overflow: hidden;
-transition: transform 0.15s;
-}
-.color-swatch:hover { transform: scale(1.1); }
-
-.color-swatch input[type=“color”] {
-position: absolute;
-inset: -4px;
-width: calc(100% + 8px);
-height: calc(100% + 8px);
-opacity: 0;
-cursor: pointer;
-border: none;
-padding: 0;
-}
-
-.hex-input {
-width: 76px;
-background: #1a1a1a;
-border: 1px solid #2a2a2a;
-color: var(–white);
-font-family: ‘Barlow Condensed’, monospace;
-font-size: 0.75rem;
-letter-spacing: 0.08em;
-padding: 0.3rem 0.5rem;
-text-transform: uppercase;
-transition: border-color 0.2s;
-}
-.hex-input:focus {
-outline: none;
-border-color: var(–gold);
-}
-
-/* Font size slider */
-.sp-slider {
--webkit-appearance: none;
-width: 90px;
-height: 3px;
-background: #333;
-border-radius: 2px;
-outline: none;
-cursor: pointer;
-}
-.sp-slider::-webkit-slider-thumb {
--webkit-appearance: none;
-width: 14px; height: 14px;
-border-radius: 50%;
-background: var(–white);
-cursor: pointer;
-transition: background 0.2s;
-}
-.sp-slider:hover::-webkit-slider-thumb { background: var(–gold); }
-
-.slider-val {
-font-family: ‘Barlow Condensed’, monospace;
-font-size: 0.72rem;
-color: var(–dim);
-min-width: 30px;
-text-align: right;
-}
-
-/* Reset button */
-.sp-reset {
-width: 100%;
-padding: 0.6rem;
-margin: 0.8rem 0 0;
-background: #1a1a1a;
-border: 1px solid #333;
-color: var(–dim);
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 0.68rem;
-font-weight: 700;
-letter-spacing: 0.2em;
-text-transform: uppercase;
-cursor: pointer;
-transition: all 0.2s;
-}
-.sp-reset:hover { background: #222; color: var(–white); border-color: #555; }
-
-/* Edit bar — add style toggle button */
-#style-toggle {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-weight: 700;
-font-size: 0.68rem;
-letter-spacing: 0.2em;
-text-transform: uppercase;
-color: var(–black);
-background: var(–gold);
-border: none;
-padding: 0.4rem 1rem;
-cursor: pointer;
-transition: background 0.2s;
-white-space: nowrap;
-}
-#style-toggle:hover { background: #f0c14b; }
-#style-toggle.active { background: var(–gold); outline: 2px solid #fff; }
-
-/* ─── EDIT BAR ───────────────────────────────────────────── */
-#edit-bar {
-position: fixed;
-bottom: 0; left: 0; right: 0;
-z-index: 200;
-background: #1a1a1a;
-border-top: 1px solid #333;
-padding: 0.55rem 1.5rem;
-display: flex;
-align-items: center;
-justify-content: space-between;
-gap: 1rem;
-transition: background 0.3s;
-}
-
-#edit-hint {
-font-size: 0.68rem;
-letter-spacing: 0.12em;
-color: var(–dim);
-font-family: ‘Barlow Condensed’, sans-serif;
-font-weight: 600;
-}
-
-#edit-btn {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-weight: 700;
-font-size: 0.68rem;
-letter-spacing: 0.2em;
-text-transform: uppercase;
-color: var(–black);
-background: var(–white);
-border: none;
-padding: 0.4rem 1rem;
-cursor: pointer;
-transition: background 0.2s, color 0.2s;
-white-space: nowrap;
-}
-#edit-btn:hover { background: var(–red); color: var(–white); }
-
-[contenteditable=“true”] {
-outline: 1px dashed rgba(212,165,32,0.5);
-outline-offset: 2px;
-cursor: text;
-border-radius: 1px;
-transition: outline 0.15s;
-}
-[contenteditable=“true”]:focus {
-outline: 2px solid var(–gold);
-background: rgba(212,165,32,0.04);
-}
-[contenteditable=“false”] { outline: none; cursor: inherit; }
-
-/* Extra bottom padding so content clears the edit bar */
-body { padding-bottom: 48px; }
-@media (max-width: 900px) {
-.stat-grid       { grid-template-columns: 1fr; gap: 2rem; }
-.how-header      { grid-template-columns: 1fr; }
-.revenue-grid    { grid-template-columns: 1fr 1fr; }
-.free-inner      { grid-template-columns: 1fr; }
-.fund-grid       { grid-template-columns: 1fr; gap: 2rem; }
-.team-cards      { grid-template-columns: 1fr 1fr; }
-.phase-items     { grid-template-columns: 1fr; }
-.hero-sub        { grid-template-columns: 1fr; }
-.big-number      { font-size: 5rem; }
-.nav-links       { display: none; }
-}
-
-@media (max-width: 580px) {
-.team-cards      { grid-template-columns: 1fr; }
-.revenue-grid    { grid-template-columns: 1fr; }
-.free-right      { grid-template-columns: 1fr; }
-}
-</style>
-
-</head>
-<body>
-
-<!-- ─── EDIT BAR ──────────────────────────────────────────── -->
-
-<div id="edit-bar">
-  <span id="edit-hint">Locked for presenting — click EDIT TEXT to make changes</span>
-  <div style="display:flex;gap:0.5rem;flex-shrink:0">
-    <button id="style-toggle" onclick="toggleStylePanel()">🎨 STYLES</button>
-    <button id="edit-btn" onclick="toggleEdit()">EDIT TEXT</button>
-  </div>
-</div>
-
-<!-- ─── STYLE PANEL ───────────────────────────────────────── -->
-
-<div id="style-panel">
-  <div class="sp-header">
-    <div class="sp-title">Style Editor</div>
-    <button class="sp-close" onclick="toggleStylePanel()">✕</button>
-  </div>
-
-  <!-- Colors -->
-
-  <div class="sp-section">
-    <div class="sp-section-title">Colors</div>
-
-```
-<div class="sp-row">
-  <div class="sp-label">Background<span>Main page background</span></div>
-  <div class="sp-controls">
-    <div class="color-swatch" id="swatch-black"><input type="color" value="#0a0a0a" oninput="liveColor('--black',this)"></div>
-    <input class="hex-input" value="#0A0A0A" oninput="hexInput('--black',this)" maxlength="7">
-  </div>
-</div>
-
-<div class="sp-row">
-  <div class="sp-label">Text<span>Primary headings & body</span></div>
-  <div class="sp-controls">
-    <div class="color-swatch" id="swatch-white"><input type="color" value="#f0ece4" oninput="liveColor('--white',this)"></div>
-    <input class="hex-input" value="#F0ECE4" oninput="hexInput('--white',this)" maxlength="7">
-  </div>
-</div>
-
-<div class="sp-row">
-  <div class="sp-label">Accent Red<span>Ticker, tags, closing</span></div>
-  <div class="sp-controls">
-    <div class="color-swatch" id="swatch-red"><input type="color" value="#d42b2b" oninput="liveColor('--red',this)"></div>
-    <input class="hex-input" value="#D42B2B" oninput="hexInput('--red',this)" maxlength="7">
-  </div>
-</div>
-
-<div class="sp-row">
-  <div class="sp-label">Accent Gold<span>Numbers, edit bar, details</span></div>
-  <div class="sp-controls">
-    <div class="color-swatch" id="swatch-gold"><input type="color" value="#d4a520" oninput="liveColor('--gold',this)"></div>
-    <input class="hex-input" value="#D4A520" oninput="hexInput('--gold',this)" maxlength="7">
-  </div>
-</div>
-
-<div class="sp-row">
-  <div class="sp-label">Card / Section BG<span>Gray section backgrounds</span></div>
-  <div class="sp-controls">
-    <div class="color-swatch" id="swatch-gray"><input type="color" value="#2a2a2a" oninput="liveColor('--gray',this)"></div>
-    <input class="hex-input" value="#2A2A2A" oninput="hexInput('--gray',this)" maxlength="7">
-  </div>
-</div>
-
-<div class="sp-row">
-  <div class="sp-label">Muted Text<span>Labels, secondary copy</span></div>
-  <div class="sp-controls">
-    <div class="color-swatch" id="swatch-dim"><input type="color" value="#888888" oninput="liveColor('--dim',this)"></div>
-    <input class="hex-input" value="#888888" oninput="hexInput('--dim',this)" maxlength="7">
-  </div>
-</div>
-```
-
-  </div>
-
-  <!-- Typography -->
-
-  <div class="sp-section">
-    <div class="sp-section-title">Typography</div>
-
-```
-<div class="sp-row">
-  <div class="sp-label">Body Size<span>Paragraphs & descriptions</span></div>
-  <div class="sp-controls">
-    <input type="range" class="sp-slider" min="12" max="22" value="16" oninput="liveSize('body-size',this,'px'); this.nextElementSibling.textContent=this.value+'px'">
-    <span class="slider-val">16px</span>
-  </div>
-</div>
-
-<div class="sp-row">
-  <div class="sp-label">Nav Size<span>Navigation link text</span></div>
-  <div class="sp-controls">
-    <input type="range" class="sp-slider" min="8" max="16" value="11" oninput="liveNavSize(this); this.nextElementSibling.textContent=this.value+'px'">
-    <span class="slider-val">11px</span>
-  </div>
-</div>
-
-<div class="sp-row">
-  <div class="sp-label">Letter Spacing<span>Labels & uppercase text</span></div>
-  <div class="sp-controls">
-    <input type="range" class="sp-slider" min="0" max="8" step="0.5" value="3.5" oninput="liveLetterSpacing(this); this.nextElementSibling.textContent=this.value+'px'">
-    <span class="slider-val">3.5px</span>
-  </div>
-</div>
-```
-
-  </div>
-
-  <!-- Layout -->
-
-  <div class="sp-section">
-    <div class="sp-section-title">Layout</div>
-
-```
-<div class="sp-row">
-  <div class="sp-label">Section Padding<span>Top/bottom spacing</span></div>
-  <div class="sp-controls">
-    <input type="range" class="sp-slider" min="2" max="10" value="5" oninput="livePadding(this); this.nextElementSibling.textContent=this.value+'rem'">
-    <span class="slider-val">5rem</span>
-  </div>
-</div>
-
-<div class="sp-row">
-  <div class="sp-label">Ticker Speed<span>Marquee animation</span></div>
-  <div class="sp-controls">
-    <input type="range" class="sp-slider" min="8" max="60" value="22" oninput="liveTickerSpeed(this); this.nextElementSibling.textContent=this.value+'s'">
-    <span class="slider-val">22s</span>
-  </div>
-</div>
-```
-
-  </div>
-
-  <!-- Nav Bar -->
-
-  <div class="sp-section">
-    <div class="sp-section-title">Nav Bar</div>
-    <div class="sp-row">
-      <div class="sp-label">Nav Background<span>Top navigation bar</span></div>
-      <div class="sp-controls">
-        <div class="color-swatch"><input type="color" value="#0a0a0a" oninput="liveNavBg(this)"></div>
-        <input class="hex-input" value="#0A0A0A" oninput="hexInputNavBg(this)" maxlength="7">
-      </div>
-    </div>
-    <div class="sp-row">
-      <div class="sp-label">Nav Text<span>Link color</span></div>
-      <div class="sp-controls">
-        <div class="color-swatch"><input type="color" value="#888888" oninput="liveNavText(this)"></div>
-        <input class="hex-input" value="#888888" oninput="hexInputNavText(this)" maxlength="7">
-      </div>
-    </div>
-  </div>
-
-  <!-- Export -->
-
-  <div class="sp-section">
-    <div class="sp-section-title">Save Your Changes</div>
-    <p style="font-size:0.72rem;color:var(--dim);line-height:1.6;margin-bottom:0.6rem;font-weight:400;">
-      Press <strong style="color:var(--white)">Cmd+S / Ctrl+S</strong> then File → Save Page As to export with all edits baked in.
-    </p>
-    <button class="sp-reset" onclick="resetStyles()">↺ Reset to Defaults</button>
-  </div>
-</div>
-
-<!-- ─── NAV ─────────────────────────────────────────────── -->
-
-<nav>
-  <a href="#hero" class="nav-logo">REBELZ<span>★</span>FÚTBOL</a>
-  <ul class="nav-links">
-    <li><a href="#how">How We Do It</a></li>
-    <li><a href="#fund">The Fund</a></li>
-    <li><a href="#team">El Team</a></li>
-    <li><a href="#phases">Phases</a></li>
-  </ul>
-  <a href="#closing" class="nav-cta">Get Involved</a>
-</nav>
-
-<!-- ─── HERO ─────────────────────────────────────────────── -->
-
-<section id="hero">
-  <div class="hero-photo"></div>
-  <div class="hero-bg"></div>
-  <div class="hero-content">
-    <div class="hero-eyebrow">Fort Worth, TX &nbsp;·&nbsp; Est. 2026 &nbsp;·&nbsp; 1201 E Maddox Ave</div>
-    <h1 class="hero-h1">
-      <span class="stroke">REBELZ</span><br>
-      <span class="red-line">FÚTBOL</span>
-    </h1>
-    <div class="hero-sub">
-      <p class="hero-sub-text">
-        Where the field becomes something bigger than the game.
-      </p>
-      <p class="hero-sub-text es">
-        Donde el campo es más que el juego.
-      </p>
-    </div>
-    <div class="hero-meta">
-      <span class="hero-location">Free Pickup Fridays · 7PM</span>
-      <div class="hero-dot"></div>
-      <span class="hero-location">Leagues Starting April 2026</span>
-      <div class="hero-dot"></div>
-      <span class="hero-scroll">↓ Scroll</span>
-    </div>
-  </div>
-</section>
-
-<!-- ─── TICKER ────────────────────────────────────────────── -->
-
-<div class="ticker-wrap" aria-hidden="true">
-  <div class="ticker-inner">
-    <span class="ticker-item">FREE 4 EVERYONE <span class="ticker-sep">★</span></span>
-    <span class="ticker-item">RETAS PARA TODOS <span class="ticker-sep">★</span></span>
-    <span class="ticker-item">COMMUNITY FIRST <span class="ticker-sep">★</span></span>
-    <span class="ticker-item">LA COMUNIDAD PRIMERO <span class="ticker-sep">★</span></span>
-    <span class="ticker-item">BRING YOUR TEAM OR COMO SOLO <span class="ticker-sep">★</span></span>
-    <span class="ticker-item">FORT WORTH FÚTBOL <span class="ticker-sep">★</span></span>
-    <span class="ticker-item">FREE 4 EVERYONE <span class="ticker-sep">★</span></span>
-    <span class="ticker-item">RETAS PARA TODOS <span class="ticker-sep">★</span></span>
-    <span class="ticker-item">COMMUNITY FIRST <span class="ticker-sep">★</span></span>
-    <span class="ticker-item">LA COMUNIDAD PRIMERO <span class="ticker-sep">★</span></span>
-    <span class="ticker-item">BRING YOUR TEAM OR COMO SOLO <span class="ticker-sep">★</span></span>
-    <span class="ticker-item">FORT WORTH FÚTBOL <span class="ticker-sep">★</span></span>
-  </div>
-</div>
-
-<!-- ─── STATEMENT ─────────────────────────────────────────── -->
-
-<section id="statement">
-  <div class="stat-grid">
-    <div class="stat-label-col">
-      <div class="label" style="margin-bottom:0.5rem">The Dream / El Sueño</div>
-      <div class="big-number">01</div>
-    </div>
-    <div class="stat-body reveal">
-      <p class="pull-quote">
-        A soccer field where your zip code doesn't determine your access. Where your body is welcomed. Where <em>your culture is the center.</em>
-      </p>
-      <p class="pull-quote-es">
-        Un campo de fútbol donde tu código postal no determina tu acceso. Donde tu cuerpo es bienvenido. Donde tu cultura es el centro.
-      </p>
-    </div>
-  </div>
-</section>
-
-<hr class="rule">
-
-<!-- ─── HOW WE DO IT ──────────────────────────────────────── -->
-
-<section id="how">
-  <div class="how-header reveal">
-    <div>
-      <div class="label" style="margin-bottom:0.8rem">Cómo lo hacemos / How We Do It</div>
-      <h2 class="how-title">
-        THE<br>
-        <span class="outline">MONEY</span><br>
-        PART
-      </h2>
-    </div>
-    <p class="how-intro">
-      Leagues and tournaments generate the revenue. That revenue funds <strong>free programming</strong>, the <strong>health clinic</strong>, and the <strong>mutual aid fund</strong>. No grants required at launch. No gatekeepers.
-      <br><br>
-      <em style="color:var(--dim);font-size:0.85rem;">Las ligas generan los ingresos. Esos ingresos financian lo gratuito.</em>
-    </p>
-  </div>
-
-  <div class="revenue-grid reveal">
-    <div class="rev-block" style="--accent:#2a5298">
-      <div class="rev-night">MON</div>
-      <div class="rev-day">Lunes</div>
-      <div class="rev-name">Men's 5v5 Futsal</div>
-      <div class="rev-fee">$65 / player<br>8 teams · 1 ref</div>
-      <div class="rev-annual">$10,400 / yr</div>
-    </div>
-    <div class="rev-block" style="--accent:#6b46c1">
-      <div class="rev-night">TUE</div>
-      <div class="rev-day">Martes</div>
-      <div class="rev-name">Coed 5v5 Futsal</div>
-      <div class="rev-fee">$65 / player<br>8 teams · 1 ref</div>
-      <div class="rev-annual">$10,400 / yr</div>
-    </div>
-    <div class="rev-block" style="--accent:#1a6635">
-      <div class="rev-night">WED</div>
-      <div class="rev-day">Miércoles</div>
-      <div class="rev-name">Men's 5v5 Small Goals</div>
-      <div class="rev-fee">$65 / player<br>8 teams · 1 ref</div>
-      <div class="rev-annual">$10,400 / yr</div>
-    </div>
-    <div class="rev-block" style="--accent:#d4a520">
-      <div class="rev-night">THU</div>
-      <div class="rev-day">Jueves</div>
-      <div class="rev-name">Cash Prize League</div>
-      <div class="rev-fee">$500 / team<br>$3K prize · 2 refs</div>
-      <div class="rev-annual" style="color:var(--gold)">$4,000 net / yr</div>
-    </div>
-    <div class="rev-block" style="--accent:#d42b2b">
-      <div class="rev-night">FRI</div>
-      <div class="rev-day">Viernes</div>
-      <div class="rev-name">Outdoor 7v7 Mens</div>
-      <div class="rev-fee">$65 / player<br>8 teams · 1 ref</div>
-      <div class="rev-annual">$14,560 / yr</div>
-    </div>
-  </div>
-
-  <div style="display:flex; justify-content:flex-end; margin-top:1rem; align-items:center; gap:1rem; flex-wrap:wrap;">
-    <span class="label">Total annual league revenue (Phase 1)</span>
-    <span style="font-family:'Black Han Sans',sans-serif; font-size:2rem; color:var(--white);">$49,760</span>
-  </div>
-</section>
-
-<hr class="rule">
-
-<!-- ─── FREE SECTION ──────────────────────────────────────── -->
-
-<section id="free">
-  <div class="free-inner">
-    <div class="free-left reveal">
-      <div class="free-kicker">Non-Negotiable / No Negociable</div>
-      <h2 class="free-title">FREE IS THE<br>POINT.</h2>
-      <p class="free-body">
-        The leagues cross-subsidize everything free. That's the model. Revenue from competitive play funds open access for everyone — no registration, no fee, no barrier.
-      </p>
-      <p class="free-body-es">
-        Las ligas financian lo gratuito. Ese es el modelo.
-      </p>
-    </div>
-    <div class="free-right reveal">
-      <div class="free-item">
-        <span class="fi-icon">⚽</span>
-        <div class="fi-title">Free Pickup Fridays</div>
-        <p class="fi-body">No sign-up. No fee. Show up and play. Friday 7PM. Forever.</p>
-      </div>
-      <div class="free-item">
-        <span class="fi-icon">🩺</span>
-        <div class="fi-title">Health Clinics</div>
-        <p class="fi-body">Free screenings, mental health access, body literacy. The field as a site of healing.</p>
-      </div>
-      <div class="free-item">
-        <span class="fi-icon">👟</span>
-        <div class="fi-title">Youth Academy</div>
-        <p class="fi-body">Skills development. Coaching certs for community members. No cost to participate.</p>
-      </div>
-      <div class="free-item">
-        <span class="fi-icon">⬡</span>
-        <div class="fi-title">Mutual Aid Fund</div>
-        <p class="fi-body">Rent. Food. Emergency support. 10% of net profit. Back to the neighborhood.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ─── FUND ───────────────────────────────────────────────── -->
-
-<section id="fund">
-  <div class="fund-grid">
-    <div class="fund-left reveal">
-      <div class="fund-tag">Non-Negotiable ★</div>
-      <h2 class="fund-title">
-        THE FUND<br>
-        <span class="block">IS THE</span>
-        WHY.
-      </h2>
-      <p class="fund-body">
-        Most organizations treat mutual aid as a nice-to-have — something that happens when there's money left over. <strong>We built it into the structure from day one.</strong>
-      </p>
-      <p class="fund-body">
-        The community fund isn't what we do with profit. It's why we create it. Housed in the nonprofit arm. Protected by design. Governed by the people it serves.
-      </p>
-      <p class="fund-body" style="color:var(--dim); font-size:0.85rem; font-style:italic;">
-        El fondo no es lo que hacemos con las ganancias. Es la razón por la que las creamos.
-      </p>
-    </div>
-    <div class="fund-right reveal">
-      <div class="fund-stat">
-        <div class="fs-num">10%</div>
-        <div class="fs-label">Of Net Profit</div>
-        <div class="fs-sub">Set aside every season. No exceptions. Deployed back into the community.</div>
-      </div>
-      <div class="fund-stat">
-        <div class="fs-num">LLC<br>+ 501c3</div>
-        <div class="fs-label">Dual-Track Structure</div>
-        <div class="fs-sub">Revenue arm funds free programming. Nonprofit arm protects the fund. Both serve the mission.</div>
-      </div>
-      <div class="fund-stat">
-        <div class="fs-num">0</div>
-        <div class="fs-label">Gatekeepers</div>
-        <div class="fs-sub">Disbursement decisions made by community members. The people who need it most decide how it flows.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<hr class="rule">
-
-<!-- ─── TEAM ───────────────────────────────────────────────── -->
-
-<section id="team">
-  <div class="team-inner">
-    <div class="team-hdr reveal">
-      <div>
-        <div class="label" style="margin-bottom:0.6rem">Los Constructores</div>
-        <h2 class="team-title">THE<br>BUILDERS.</h2>
-      </div>
-      <p class="team-intro-text">
-        Four people. Four gifts. One field. The most powerful thing you can build is something your community actually needs.
-      </p>
-    </div>
-    <div class="team-cards">
-      <div class="tc" style="--tc-color:#d4a520">
-        <span class="tc-glyph">🌀</span>
-        <div class="tc-role">Community Organizer</div>
-        <h3 class="tc-name">The Storyteller</h3>
-        <p class="tc-desc">Before you build anything, you must first listen. And listening is its own form of architecture.</p>
-        <div class="tc-gift">Gift: Makes people feel seen<br>Move: Door knocks → manifestos</div>
-      </div>
-      <div class="tc" style="--tc-color:#2a5298">
-        <span class="tc-glyph">⚙️</span>
-        <div class="tc-role">Math & Mechanics</div>
-        <h3 class="tc-name">The Wizard</h3>
-        <p class="tc-desc">A heart rooted in love, a mind that sees systems — and builds them to free people, not constrain them.</p>
-        <div class="tc-gift">Gift: Makes complexity legible<br>Move: Numbers → poems</div>
-      </div>
-      <div class="tc" style="--tc-color:#1a6635">
-        <span class="tc-glyph">🌿</span>
-        <div class="tc-role">Architecture & Space</div>
-        <h3 class="tc-name">The Dreamer</h3>
-        <p class="tc-desc">Dreams of a world connected and thriving amongst nature. Every space is a decision that reveals what we value.</p>
-        <div class="tc-gift">Gift: Sees what could be<br>Move: Blueprint → ecosystem</div>
-      </div>
-      <div class="tc" style="--tc-color:#d42b2b">
-        <span class="tc-glyph">💊</span>
-        <div class="tc-role">Health Justice</div>
-        <h3 class="tc-name">The Advocate</h3>
-        <p class="tc-desc">Knows what it means when a body has been denied care. Knows healing happens in community, on fields, through joy.</p>
-        <div class="tc-gift">Gift: Political + personal at once<br>Move: Clinic → commons</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<hr class="rule">
-
-<!-- ─── PHASES ────────────────────────────────────────────── -->
-
-<section id="phases">
-  <div class="phases-hdr reveal">
-    <div class="label" style="margin-bottom:0.6rem">La Hoja de Ruta / The Roadmap</div>
-    <h2 class="phases-title">THREE<br>PHASES.</h2>
-    <p class="phases-sub">One trajectory. From a field in Fort Worth to a model that communities can replicate, adapt, and make their own.</p>
-  </div>
-
-  <div class="phase-row reveal">
-    <div class="phase-num-col" style="--ph-color:var(--gold)">
-      <div class="phase-num">01</div>
-      <div class="phase-tag">Foundation<br>2026</div>
-    </div>
-    <div class="phase-items">
-      <div class="pi">
-        <div class="pi-name">Weekday Leagues</div>
-        <p class="pi-desc">Mon–Fri, 7–11PM. Five nights, five formats. The revenue engine.</p>
-      </div>
-      <div class="pi">
-        <div class="pi-name">Free Pickup Fridays</div>
-        <p class="pi-desc">No registration. No fee. Show up and play. Cross-subsidized by league revenue.</p>
-      </div>
-      <div class="pi">
-        <div class="pi-name">Rebelz Clinic</div>
-        <p class="pi-desc">Free health screenings on-site. MD, RD, PT — community-embedded care.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="phase-row reveal">
-    <div class="phase-num-col" style="--ph-color:var(--white)">
-      <div class="phase-num">02</div>
-      <div class="phase-tag">Expansion<br>2027</div>
-    </div>
-    <div class="phase-items">
-      <div class="pi">
-        <div class="pi-name">Weekend Divisions</div>
-        <p class="pi-desc">8AM–10PM Sat & Sun. Youth, women's, 40+, competitive open. 14 hours of field time.</p>
-      </div>
-      <div class="pi">
-        <div class="pi-name">Mutual Aid Live</div>
-        <p class="pi-desc">Fund fully operational. Rent, food, emergency support flowing back to the neighborhood.</p>
-      </div>
-      <div class="pi">
-        <div class="pi-name">Gym & Membership</div>
-        <p class="pi-desc">Access, jerseys, exclusive classes, seasonal tournaments. Revenue diversification.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="phase-row reveal">
-    <div class="phase-num-col" style="--ph-color:var(--red)">
-      <div class="phase-num">03</div>
-      <div class="phase-tag">Legacy<br>2028+</div>
-    </div>
-    <div class="phase-items">
-      <div class="pi">
-        <div class="pi-name">Youth Academy</div>
-        <p class="pi-desc">Skills development. Coaching certs for community members. Pathways that didn't exist before.</p>
-      </div>
-      <div class="pi">
-        <div class="pi-name">Physical Facility</div>
-        <p class="pi-desc">A permanent home. Bodega, café, community space, field — all under one roof.</p>
-      </div>
-      <div class="pi">
-        <div class="pi-name">Replicable Model</div>
-        <p class="pi-desc">Documentation, open-source tools, and relationships to help other communities build this too.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ─── CLOSING ───────────────────────────────────────────── -->
-
-<section id="closing">
-  <div class="closing-inner reveal">
-    <h2 class="closing-en">
-      THE FIELD<br>IS OURS.
-    </h2>
-    <p class="closing-es">
-      Bring your team or como solo.<br>
-      1201 E Maddox Ave, Fort Worth, TX<br>
-      Free Pickup — Viernes / Fridays 7PM
-    </p>
-    <div class="closing-meta">
-      Rebelz Fútbol Community &nbsp;★&nbsp; Fort Worth, Texas &nbsp;★&nbsp; Est. 2026<br>
-      Season 1 Starts April 27, 2026 &nbsp;★&nbsp; 6 Weeks Before The World Cup
-    </div>
-  </div>
-</section>
-
-<!-- ─── FOOTER ────────────────────────────────────────────── -->
-
-<footer>
-  <div class="footer-logo">REBELZ<span>★</span>FÚTBOL</div>
-  <ul class="footer-links">
-    <li><a href="#how">Leagues</a></li>
-    <li><a href="#free">Free Programs</a></li>
-    <li><a href="#fund">Mutual Aid</a></li>
-    <li><a href="#team">El Team</a></li>
-  </ul>
-  <div class="footer-address">1201 E Maddox Ave &nbsp;·&nbsp; Fort Worth TX</div>
-</footer>
-
-<script>
-// ── Scroll reveal ──────────────────────────────────────────
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry, i) => {
-    if (entry.isIntersecting) {
-      setTimeout(() => entry.target.classList.add('vis'), i * 60);
-    }
-  });
-}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-// ── Style Editor ──────────────────────────────────────────
-const DEFAULTS = {
-  '--black': '#0a0a0a',
-  '--white': '#f0ece4',
-  '--red':   '#d42b2b',
-  '--gold':  '#d4a520',
-  '--gray':  '#2a2a2a',
-  '--dim':   '#888888',
+import { useEffect } from "react";
+
+const C = {
+  black: "#0a0a0a", white: "#f0ece4", red: "#d42b2b",
+  gold: "#d4a520",  gray:  "#2a2a2a", mid: "#555555", dim: "#888888",
+};
+const F = {
+  display: "'Black Han Sans', sans-serif",
+  ui:      "'Barlow Condensed', sans-serif",
+  body:    "'Barlow', sans-serif",
 };
 
-const SWATCH_MAP = {
-  '--black': 'swatch-black',
-  '--white': 'swatch-white',
-  '--red':   'swatch-red',
-  '--gold':  'swatch-gold',
-  '--gray':  'swatch-gray',
-  '--dim':   'swatch-dim',
-};
+const GLOBAL = `
+  @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Barlow:wght@400;500&display=swap');
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;}
+  .reveal.vis{opacity:1;transform:translateY(0);}
+  .na{font-family:${F.ui};font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:${C.dim};text-decoration:none;transition:color .2s;}
+  .na:hover{color:${C.white};}
+  .rb{transition:background .25s;}
+  .rb:hover{background:#111!important;}
+  .rb:hover .bar{transform:scaleX(1)!important;}
+  .tc{transition:background .25s;}
+  .tc:hover{background:#0f0f0f!important;}
+  .tc:hover .bar{transform:scaleX(1)!important;}
+  .pi{transition:background .2s;}
+  .pi:hover{background:#0d0d0d!important;}
+  @keyframes tk{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  .tk{animation:tk 22s linear infinite;display:inline-flex;}
+`;
 
-function setVar(name, value) {
-  document.documentElement.style.setProperty(name, value);
-}
-
-function syncSwatch(varName, hex) {
-  const id = SWATCH_MAP[varName];
-  if (!id) return;
-  const swatch = document.getElementById(id);
-  if (swatch) {
-    swatch.style.background = hex;
-    const picker = swatch.querySelector('input[type="color"]');
-    if (picker) picker.value = hex;
-  }
-}
-
-function syncHexInput(varName, hex) {
-  // find the hex input paired with this variable
-  const swatchId = SWATCH_MAP[varName];
-  if (!swatchId) return;
-  const swatch = document.getElementById(swatchId);
-  if (!swatch) return;
-  const hexEl = swatch.closest('.sp-controls')?.querySelector('.hex-input');
-  if (hexEl) hexEl.value = hex.toUpperCase().replace('#','#');
-}
-
-// Color picker → live update
-function liveColor(varName, picker) {
-  const hex = picker.value;
-  setVar(varName, hex);
-  // update swatch bg
-  picker.closest('.color-swatch').style.background = hex;
-  // update hex input
-  const controls = picker.closest('.sp-controls');
-  if (controls) {
-    const hexEl = controls.querySelector('.hex-input');
-    if (hexEl) hexEl.value = hex.toUpperCase();
-  }
-}
-
-// Hex text input → live update
-function hexInput(varName, input) {
-  let val = input.value.trim();
-  if (!val.startsWith('#')) val = '#' + val;
-  if (/^#[0-9a-fA-F]{6}$/.test(val)) {
-    setVar(varName, val);
-    const controls = input.closest('.sp-controls');
-    if (controls) {
-      const swatch = controls.querySelector('.color-swatch');
-      if (swatch) {
-        swatch.style.background = val;
-        const picker = swatch.querySelector('input[type="color"]');
-        if (picker) picker.value = val;
-      }
-    }
-  }
-}
-
-// Nav bg
-function liveNavBg(picker) {
-  document.querySelector('nav').style.background = picker.value;
-  const controls = picker.closest('.sp-controls');
-  if (controls) controls.querySelector('.hex-input').value = picker.value.toUpperCase();
-}
-function hexInputNavBg(input) {
-  let val = input.value.trim();
-  if (!val.startsWith('#')) val = '#' + val;
-  if (/^#[0-9a-fA-F]{6}$/.test(val)) document.querySelector('nav').style.background = val;
-}
-
-// Nav text
-function liveNavText(picker) {
-  document.querySelectorAll('.nav-links a').forEach(a => a.style.color = picker.value);
-  const controls = picker.closest('.sp-controls');
-  if (controls) controls.querySelector('.hex-input').value = picker.value.toUpperCase();
-}
-function hexInputNavText(input) {
-  let val = input.value.trim();
-  if (!val.startsWith('#')) val = '#' + val;
-  if (/^#[0-9a-fA-F]{6}$/.test(val))
-    document.querySelectorAll('.nav-links a').forEach(a => a.style.color = val);
-}
-
-// Font size for body text
-function liveSize(id, slider, unit) {
-  document.querySelectorAll('.body-text, .fund-body, .free-body, .how-intro, .pi-desc, .tc-desc, .fi-body, .fs-sub, .hero-sub-text').forEach(el => {
-    el.style.fontSize = slider.value + unit;
-  });
-}
-
-// Nav font size
-function liveNavSize(slider) {
-  document.querySelectorAll('.nav-links a').forEach(a => a.style.fontSize = slider.value + 'px');
-}
-
-// Letter spacing on labels
-function liveLetterSpacing(slider) {
-  document.querySelectorAll('.label, .sp-section-title, .rev-day, .fund-tag, .tc-role, .phase-tag, .hero-eyebrow').forEach(el => {
-    el.style.letterSpacing = slider.value * 0.1 + 'em';
-  });
-}
-
-// Section padding
-function livePadding(slider) {
-  document.querySelectorAll('section').forEach(s => {
-    s.style.paddingTop    = slider.value + 'rem';
-    s.style.paddingBottom = slider.value + 'rem';
-  });
-}
-
-// Ticker speed
-function liveTickerSpeed(slider) {
-  const inner = document.querySelector('.ticker-inner');
-  if (inner) inner.style.animationDuration = slider.value + 's';
-}
-
-// Reset all
-function resetStyles() {
-  Object.entries(DEFAULTS).forEach(([name, val]) => {
-    setVar(name, val);
-    syncSwatch(name, val);
-  });
-  // Reset all inline styles
-  document.querySelectorAll('section').forEach(s => {
-    s.style.paddingTop = '';
-    s.style.paddingBottom = '';
-  });
-  document.querySelectorAll('.nav-links a').forEach(a => {
-    a.style.color = ''; a.style.fontSize = '';
-  });
-  document.querySelectorAll('.body-text,.fund-body,.free-body,.how-intro,.pi-desc,.tc-desc,.fi-body,.fs-sub,.hero-sub-text').forEach(el => {
-    el.style.fontSize = '';
-  });
-  document.querySelector('nav').style.background = '';
-  const ticker = document.querySelector('.ticker-inner');
-  if (ticker) ticker.style.animationDuration = '';
-}
-
-// Panel open/close
-function toggleStylePanel() {
-  const panel  = document.getElementById('style-panel');
-  const toggle = document.getElementById('style-toggle');
-  panel.classList.toggle('open');
-  toggle.classList.toggle('active');
-}
-
-// Init swatch backgrounds from CSS vars
-function initSwatches() {
-  const computed = getComputedStyle(document.documentElement);
-  Object.entries(SWATCH_MAP).forEach(([varName, swatchId]) => {
-    const swatch = document.getElementById(swatchId);
-    if (!swatch) return;
-    const val = computed.getPropertyValue(varName).trim();
-    swatch.style.background = val;
-  });
-}
-// Selectors for all editable text — skips structural/nav/icon elements
-const EDITABLE_SELECTORS = [
-  'h1','h2','h3','h4',
-  'p','blockquote',
-  '.hero-eyebrow','.hero-sub-text','.hero-location',
-  '.pull-quote','.pull-quote-es',
-  '.label','.section-label',
-  '.rev-night','.rev-day','.rev-name','.rev-fee','.rev-annual',
-  '.free-kicker','.free-title','.free-body','.free-body-es',
-  '.fi-title','.fi-body',
-  '.fund-tag','.fund-title','.fund-body',
-  '.fs-num','.fs-label','.fs-sub',
-  '.how-title','.how-intro',
-  '.tc-role','.tc-name','.tc-desc','.tc-gift',
-  '.pi-name','.pi-desc',
-  '.phase-num','.phase-tag',
-  '.phases-title','.phases-sub',
-  '.closing-en','.closing-es','.closing-meta',
-  '.footer-logo','.footer-address',
-  '.stat-grid .pull-quote',
-  '.team-intro-text','.team-title',
-  '.ticker-item',
+const LEAGUES = [
+  { night:"MON", day:"Lunes",     name:"Men's 5v5 Futsal",      fee:"$65/player · 8 teams · 1 ref", annual:"$10,400 / yr", color:"#2a5298" },
+  { night:"TUE", day:"Martes",    name:"Coed 5v5 Futsal",       fee:"$65/player · 8 teams · 1 ref", annual:"$10,400 / yr", color:"#6b46c1" },
+  { night:"WED", day:"Miércoles", name:"Men's 5v5 Small Goals",  fee:"$65/player · 8 teams · 1 ref", annual:"$10,400 / yr", color:"#1a6635" },
+  { night:"THU", day:"Jueves",    name:"Cash Prize League",      fee:"$500/team · $3K prize · 2 refs",annual:"$4,000 net/yr",color:"#d4a520" },
+  { night:"FRI", day:"Viernes",   name:"Outdoor 7v7 Mens",       fee:"$65/player · 8 teams · 1 ref", annual:"$14,560 / yr", color:"#d42b2b" },
+];
+const FREE_ITEMS = [
+  { icon:"⚽", title:"Free Pickup Fridays", body:"No sign-up. No fee. Show up and play. Friday 7PM. Forever." },
+  { icon:"🩺", title:"Health Clinics",      body:"Free screenings, mental health access, body literacy. The field as healing." },
+  { icon:"👟", title:"Youth Academy",        body:"Skills development. Coaching certs for community. No cost to participate." },
+  { icon:"⬡",  title:"Mutual Aid Fund",     body:"Rent. Food. Emergency support. 10% of net profit. Back to the neighborhood." },
+];
+const TEAM = [
+  { glyph:"", role:"The Storyteller",  name:"Daniel Garcia Rodriguez", color:"#e8f4ea",
+    desc:"Before you build anything, you must first listen. Mandar obedeciendo.",
+    gift:"Gift: Makes people feel seen\nMove: Conversations → manifestos" },
+  { glyph:"", role:"Math & Mechanics",     name:"Henry Alvarez",      color:"#e8f4ea",
+    desc:"A heart rooted in love, a mind that sees systems — and builds them to free people, not constrain them.",
+    gift:"Gift: Makes complexity legible\nMove: Numbers → poems" },
+  { glyph:"", role:"Architecture & Space", name:"Fernando Olmedo Rivera",     color:"#e8f4ea",
+    desc:"Dreams of a world connected and thriving amongst nature. Every space is a decision that reveals what we value.",
+    gift:"Gift: Sees what could be\nMove: Blueprint → ecosystem" },
+  { glyph:"", role:"Health Justice",        name:"Oscar Enriquez",    color:"#e8f4ea",
+    desc:"Knows healing happens in community, on fields, through joy. Holds the political and the personal at once.",
+    gift:"Gift: Political + personal\nMove: Clinic → commons" },
+];
+const PHASES = [
+  { num:"01", tag:"Foundation\n2026", color:C.gold, items:[
+    { name:"Weekday Leagues",      desc:"Mon–Fri, 7–11PM. Five nights, five formats. The revenue engine." },
+    { name:"Free Pickup Fridays",  desc:"No registration. No fee. Cross-subsidized by league revenue." },
+    { name:"Rebelz Health Clinic", desc:"Free screenings on-site. MD, RD, PT — community-embedded care." },
+  ]},
+  { num:"02", tag:"Expansion\n2027", color:C.white, items:[
+    { name:"Weekend Divisions",    desc:"8AM–10PM Sat & Sun. Youth, women's, 40+, competitive open." },
+    { name:"Mutual Aid Live",      desc:"Fund fully operational. Money flowing back to the neighborhood." },
+    { name:"Gym & Membership",     desc:"Access, jerseys, exclusive classes, seasonal tournaments." },
+  ]},
+  { num:"03", tag:"Legacy\n2028+",   color:C.red, items:[
+    { name:"Youth Academy",        desc:"Skills development. Coaching certs. Pathways that didn't exist." },
+    { name:"Physical Facility",    desc:"A permanent home. Bodega, café, community space, field." },
+    { name:"Replicable Model",     desc:"Open-source tools to help other communities build this too." },
+  ]},
 ];
 
-let editMode = false; // starts locked
-
-function setEditMode(on) {
-  editMode = on;
-  document.querySelectorAll('[data-editable]').forEach(el => {
-    el.contentEditable = on ? 'true' : 'false';
-  });
-  const bar   = document.getElementById('edit-bar');
-  const btn   = document.getElementById('edit-btn');
-  const hint  = document.getElementById('edit-hint');
-  bar.style.background = on ? '#1a1a1a' : '#0f2a18';
-  btn.textContent = on ? 'LOCK ✓' : 'EDIT TEXT';
-  hint.textContent = on
-    ? 'Click any text to edit — all changes stay in your browser'
-    : 'Locked for presenting — click EDIT TEXT to make changes';
+function useReveal() {
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("vis"); }),
+      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
+    );
+    document.querySelectorAll(".reveal").forEach(el => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
 }
 
-function toggleEdit() {
-  setEditMode(!editMode);
+function Nav() {
+  return (
+    <nav style={{ position:"fixed", top:0, left:0, right:0, zIndex:100, display:"flex", alignItems:"center", justifyContent:"space-between", padding:"1rem 1.5rem", background:"rgba(10,10,10,0.92)", backdropFilter:"blur(8px)", borderBottom:"1px solid #1a1a1a" }}>
+      <a href="#hero" style={{ fontFamily:F.display, fontSize:"1.2rem", letterSpacing:"0.06em", color:C.white, textDecoration:"none" }}>
+        REBELZ<span style={{ color:C.red }}>★</span>FÚTBOL
+      </a>
+      <div style={{ display:"flex", gap:"2rem" }}>
+        {[["How We Do It","#how"],["The Fund","#fund"],["El Team","#team"],["Phases","#phases"]].map(([l,h]) =>
+          <a key={h} href={h} className="na">{l}</a>
+        )}
+      </div>
+      <a href="#closing" style={{ fontFamily:F.ui, fontWeight:700, fontSize:"0.7rem", letterSpacing:"0.15em", textTransform:"uppercase", color:C.black, background:C.red, padding:"0.45rem 1.1rem", textDecoration:"none" }}>
+        Get Involved
+      </a>
+    </nav>
+  );
 }
 
-// Tag all editable nodes
-function initEditable() {
-  const seen = new Set();
-  EDITABLE_SELECTORS.forEach(sel => {
-    document.querySelectorAll(sel).forEach(el => {
-      // Skip nav links, the edit bar itself, ticker (cosmetic only)
-      if (el.closest('#edit-bar') || el.closest('nav ul') || el.closest('.ticker-wrap')) return;
-      if (seen.has(el)) return;
-      seen.add(el);
-      el.dataset.editable = '1';
-      el.contentEditable = 'false';
-      // Prevent Enter from inserting <div> blocks
-      el.addEventListener('keydown', e => {
-        if (e.key === 'Enter') { e.preventDefault(); document.execCommand('insertLineBreak'); }
-      });
-    });
-  });
+function Hero() {
+  return (
+    <section id="hero" style={{ minHeight:"100vh", display:"flex", flexDirection:"column", justifyContent:"flex-end", padding:"60px 1.5rem 3rem", position:"relative", overflow:"hidden" }}>
+      <div style={{ position:"absolute", inset:0, background:"radial-gradient(ellipse at 50% 80%, #0d2b16 0%, #060f0a 60%, #000 100%)", zIndex:0 }}/>
+      <div style={{ position:"absolute", inset:0, background:"linear-gradient(to bottom, rgba(10,10,10,0.3) 0%, rgba(10,10,10,0.7) 60%, #0a0a0a 100%)", zIndex:1 }}/>
+      <div style={{ position:"relative", zIndex:2, maxWidth:1100, margin:"0 auto", width:"100%" }}>
+        <div style={{ fontFamily:F.ui, fontSize:"0.7rem", letterSpacing:"0.4em", textTransform:"uppercase", color:C.red, fontWeight:700, marginBottom:"0.8rem" }}>Fort Worth, TX · Est. 2026 · 1201 E Maddox Ave</div>
+        <h1 style={{ fontFamily:F.display, fontSize:"clamp(4.5rem,14vw,11rem)", lineHeight:0.88, letterSpacing:"-0.01em", textTransform:"uppercase" }}>
+          <span style={{ WebkitTextStroke:`2px ${C.white}`, color:"transparent", display:"block" }}>REBELZ</span>
+          <span style={{ color:C.red, display:"block" }}>FÚTBOL</span>
+        </h1>
+        <div style={{ marginTop:"1.5rem", display:"grid", gridTemplateColumns:"1fr 1fr", gap:"1rem", maxWidth:700 }}>
+          <p style={{ fontFamily:F.body, fontSize:"clamp(1rem,2vw,1.25rem)", lineHeight:1.55, color:"rgba(240,236,228,0.75)", fontStyle:"italic" }}>Where the field becomes something bigger than the game.</p>
+          <p style={{ fontFamily:F.body, fontSize:"clamp(0.9rem,1.8vw,1.1rem)", lineHeight:1.55, color:C.dim, fontStyle:"italic" }}>Donde el campo es más que el juego.</p>
+        </div>
+        <div style={{ marginTop:"2.5rem", display:"flex", alignItems:"center", gap:"1.5rem" }}>
+          <span style={{ fontFamily:F.ui, fontSize:"0.72rem", letterSpacing:"0.25em", textTransform:"uppercase", color:C.dim, fontWeight:600 }}>Free Pickup Fridays · 7PM</span>
+          <span style={{ width:4, height:4, borderRadius:"50%", background:C.red, display:"inline-block" }}/>
+          <span style={{ fontFamily:F.ui, fontSize:"0.72rem", letterSpacing:"0.25em", textTransform:"uppercase", color:C.dim, fontWeight:600 }}>Leagues Starting April 2026</span>
+        </div>
+      </div>
+    </section>
+  );
 }
 
-// Cmd/Ctrl+S hint
-document.addEventListener('keydown', e => {
-  if ((e.metaKey || e.ctrlKey) && e.key === 's') {
-    e.preventDefault();
-    const hint = document.getElementById('edit-hint');
-    const prev = hint.textContent;
-    hint.textContent = '✓ To save permanently: File → Save Page As... (Webpage, Complete)';
-    hint.style.color = '#5dba7a';
-    setTimeout(() => { hint.textContent = prev; hint.style.color = ''; }, 3500);
-  }
-});
+function Ticker() {
+  const items = ["FREE 4 EVERYONE","RETAS PARA TODOS","COMMUNITY FIRST","LA COMUNIDAD PRIMERO","BRING YOUR TEAM OR COME SOLO","FORT WORTH FÚTBOL"];
+  return (
+    <div style={{ background:C.red, padding:"0.65rem 0", overflow:"hidden", whiteSpace:"nowrap" }}>
+      <div className="tk">
+        {[...items,...items].map((item,i) => (
+          <span key={i} style={{ fontFamily:F.display, fontSize:"0.85rem", letterSpacing:"0.12em", textTransform:"uppercase", color:C.white, padding:"0 2.5rem" }}>
+            {item} <span style={{ color:"rgba(255,255,255,0.4)", padding:"0 0.5rem" }}>★</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
 
-initEditable();
-initSwatches();
-</script>
+function Statement() {
+  return (
+    <section id="statement" style={{ padding:"6rem 1.5rem", maxWidth:1100, margin:"0 auto" }}>
+      <div className="reveal" style={{ display:"grid", gridTemplateColumns:"1fr 2fr", gap:"4rem", alignItems:"start" }}>
+        <div>
+          <div style={{ fontFamily:F.ui, fontSize:"0.65rem", letterSpacing:"0.35em", textTransform:"uppercase", color:C.dim, marginBottom:"0.5rem", fontWeight:600 }}>The Dream / El Sueño</div>
+          <div style={{ fontFamily:F.display, fontSize:"8rem", lineHeight:0.85, color:"#1a1a1a", userSelect:"none" }}>01</div>
+        </div>
+        <div style={{ display:"flex", flexDirection:"column", gap:"2rem" }}>
+          <p style={{ fontFamily:F.ui, fontWeight:700, fontSize:"clamp(2rem,4.5vw,3.5rem)", lineHeight:1.1, color:C.white }}>
+            A soccer field where your zip code doesn't determine your access. Where your body is welcomed. Where <em style={{ color:C.gold }}>your culture is the center.</em>
+          </p>
+          <p style={{ fontFamily:F.ui, fontStyle:"italic", fontSize:"clamp(1.1rem,2vw,1.4rem)", color:C.dim, lineHeight:1.6, borderLeft:"2px solid #222", paddingLeft:"1rem" }}>
+            Un campo de fútbol donde tu código postal no determina tu acceso. Donde tu cultura es el centro.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
 
-</body>
-</html>
+function HowWeDoIt() {
+  return (
+    <section id="how" style={{ borderTop:"1px solid #1a1a1a", padding:"5rem 1.5rem", maxWidth:1100, margin:"0 auto" }}>
+      <div className="reveal" style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"2rem", marginBottom:"4rem", alignItems:"end" }}>
+        <div>
+          <div style={{ fontFamily:F.ui, fontSize:"0.65rem", letterSpacing:"0.35em", textTransform:"uppercase", color:C.dim, marginBottom:"0.8rem", fontWeight:600 }}>Cómo lo hacemos / How We Do It</div>
+          <h2 style={{ fontFamily:F.display, fontSize:"clamp(2.5rem,6vw,5rem)", lineHeight:0.9 }}>
+            <span style={{ display:"block", color:C.white }}>THE</span>
+            <span style={{ display:"block", WebkitTextStroke:`1.5px ${C.white}`, color:"transparent" }}>MONEY</span>
+            <span style={{ display:"block", color:C.white }}>PART</span>
+          </h2>
+        </div>
+        <p style={{ fontFamily:F.body, fontSize:"clamp(1rem,1.8vw,1.15rem)", lineHeight:1.7, color:C.dim }}>
+          Leagues and tournaments generate the revenue. That revenue funds <strong style={{ color:C.white }}>free programming</strong>, <strong style={{ color:C.white }}>the health clinic</strong>, and the <strong style={{ color:C.white }}>mutual aid fund</strong>. No grants required at launch.
+        </p>
+      </div>
+      <div className="reveal" style={{ display:"grid", gridTemplateColumns:"repeat(5,1fr)", border:"1px solid #1a1a1a" }}>
+        {LEAGUES.map((l,i) => (
+          <div key={l.night} className="rb" style={{ padding:"1.8rem 1.2rem", borderRight:i<4?"1px solid #1a1a1a":"none", position:"relative" }}>
+            <div className="bar" style={{ position:"absolute", top:0, left:0, right:0, height:3, background:l.color, transform:"scaleX(0)", transformOrigin:"left", transition:"transform .35s ease" }}/>
+            <div style={{ fontFamily:F.display, fontSize:"1.6rem", color:l.color, marginBottom:"0.2rem" }}>{l.night}</div>
+            <div style={{ fontFamily:F.ui, fontSize:"0.62rem", letterSpacing:"0.25em", textTransform:"uppercase", color:C.dim, fontWeight:600, marginBottom:"0.8rem" }}>{l.day}</div>
+            <div style={{ fontFamily:F.ui, fontSize:"0.88rem", fontWeight:700, color:C.white, lineHeight:1.3, marginBottom:"0.5rem" }}>{l.name}</div>
+            <div style={{ fontFamily:F.ui, fontSize:"0.78rem", color:C.dim, lineHeight:1.5 }}>{l.fee}</div>
+            <div style={{ marginTop:"1rem", paddingTop:"0.8rem", borderTop:"1px solid #1a1a1a", fontFamily:F.ui, fontSize:"0.72rem", letterSpacing:"0.1em", color:l.color, fontWeight:700, textTransform:"uppercase" }}>{l.annual}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ display:"flex", justifyContent:"flex-end", marginTop:"1rem", alignItems:"center", gap:"1rem" }}>
+        <span style={{ fontFamily:F.ui, fontSize:"0.65rem", letterSpacing:"0.35em", textTransform:"uppercase", color:C.dim, fontWeight:600 }}>Total annual league revenue (Phase 1)</span>
+        <span style={{ fontFamily:F.display, fontSize:"2rem", color:C.white }}>$49,760</span>
+      </div>
+    </section>
+  );
+}
+
+function FreeSection() {
+  return (
+    <section id="free" style={{ background:C.gray, padding:"5rem 1.5rem", margin:"4rem 0", position:"relative", overflow:"hidden" }}>
+      <div style={{ position:"absolute", right:"-2vw", top:"50%", transform:"translateY(-50%)", fontFamily:F.display, fontSize:"28vw", color:"rgba(255,255,255,0.03)", pointerEvents:"none", lineHeight:1, userSelect:"none" }}>FREE</div>
+      <div style={{ maxWidth:1100, margin:"0 auto", display:"grid", gridTemplateColumns:"1fr 1fr", gap:"4rem", alignItems:"center", position:"relative", zIndex:1 }}>
+        <div className="reveal">
+          <div style={{ fontFamily:F.ui, fontSize:"0.68rem", letterSpacing:"0.4em", textTransform:"uppercase", color:C.gold, fontWeight:700, marginBottom:"0.8rem" }}>Non-Negotiable / No Negociable</div>
+          <h2 style={{ fontFamily:F.display, fontSize:"clamp(2.5rem,5vw,4.5rem)", lineHeight:0.92, color:C.white, marginBottom:"1.5rem" }}>FREE IS THE POINT.</h2>
+          <p style={{ fontFamily:F.body, fontSize:"1.05rem", lineHeight:1.75, color:"rgba(240,236,228,0.7)", marginBottom:"1rem" }}>The leagues cross-subsidize everything free. Revenue from competitive play funds open access for everyone — no registration, no fee, no barrier.</p>
+          <p style={{ fontFamily:F.body, fontSize:"0.9rem", lineHeight:1.7, color:C.dim, fontStyle:"italic" }}>Las ligas financian lo gratuito. Ese es el modelo.</p>
+        </div>
+        <div className="reveal" style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"1px", background:"#333" }}>
+          {FREE_ITEMS.map(item => (
+            <div key={item.title} style={{ background:"#2a2a2a", padding:"1.5rem 1.2rem" }}>
+              <span style={{ fontSize:"1.6rem", display:"block", marginBottom:"0.6rem" }}>{item.icon}</span>
+              <div style={{ fontFamily:F.ui, fontSize:"0.95rem", fontWeight:700, color:C.white, textTransform:"uppercase", letterSpacing:"0.05em", marginBottom:"0.3rem" }}>{item.title}</div>
+              <p style={{ fontFamily:F.body, fontSize:"0.8rem", color:C.dim, lineHeight:1.6 }}>{item.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Fund() {
+  return (
+    <section id="fund" style={{ padding:"6rem 1.5rem", maxWidth:1100, margin:"0 auto" }}>
+      <div style={{ display:"grid", gridTemplateColumns:"1.2fr 1fr", gap:"5rem", alignItems:"center" }}>
+        <div className="reveal">
+          <div style={{ display:"inline-flex", background:C.red, padding:"0.25rem 0.7rem", marginBottom:"1.2rem" }}>
+            <span style={{ fontFamily:F.ui, fontSize:"0.65rem", letterSpacing:"0.25em", textTransform:"uppercase", fontWeight:700, color:C.white }}>Non-Negotiable ★</span>
+          </div>
+          <h2 style={{ fontFamily:F.display, fontSize:"clamp(2.2rem,5vw,4rem)", lineHeight:0.92, color:C.white, marginBottom:"1.5rem" }}>
+            <span style={{ display:"block" }}>THE FUND</span>
+            <span style={{ display:"block", WebkitTextStroke:`1.5px ${C.white}`, color:"transparent" }}>IS THE</span>
+            <span style={{ display:"block" }}>WHY.</span>
+          </h2>
+          <p style={{ fontFamily:F.body, fontSize:"1rem", lineHeight:1.8, color:"rgba(240,236,228,0.7)", marginBottom:"0.8rem" }}>Most organizations treat mutual aid as a nice-to-have. <strong style={{ color:C.white }}>We built it into the structure from day one.</strong></p>
+          <p style={{ fontFamily:F.body, fontSize:"1rem", lineHeight:1.8, color:"rgba(240,236,228,0.7)", marginBottom:"0.8rem" }}>The community fund isn't what we do with profit. It's why we create it. Housed in the nonprofit arm. Protected by design. Governed by the people it serves.</p>
+          <p style={{ fontFamily:F.body, fontSize:"0.85rem", lineHeight:1.7, color:C.dim, fontStyle:"italic" }}>El fondo no es lo que hacemos con las ganancias. Es la razón por la que las creamos.</p>
+        </div>
+        <div className="reveal">
+          {[
+            { num:"10%",       label:"Of Net Profit",  sub:"Set aside every season. No exceptions. Back into the community." },
+            { num:"LLC+501c3", label:"Dual-Track",      sub:"Revenue arm funds free programming. Nonprofit arm protects the fund." },
+            { num:"0",         label:"Gatekeepers",     sub:"Disbursement decisions made by the community members who need it most." },
+          ].map((s,i) => (
+            <div key={s.label} style={{ padding:"1.8rem 0", borderBottom:"1px solid #1a1a1a", ...(i===0?{borderTop:"1px solid #1a1a1a"}:{}) }}>
+              <div style={{ fontFamily:F.display, fontSize:"3rem", color:C.gold, lineHeight:1, marginBottom:"0.3rem" }}>{s.num}</div>
+              <div style={{ fontFamily:F.ui, fontSize:"0.78rem", fontWeight:700, color:C.white, textTransform:"uppercase", letterSpacing:"0.1em", marginBottom:"0.2rem" }}>{s.label}</div>
+              <div style={{ fontFamily:F.body, fontSize:"0.78rem", color:C.dim, lineHeight:1.5 }}>{s.sub}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Team() {
+  return (
+    <section id="team" style={{ background:"#0d0d0d", borderTop:"1px solid #1a1a1a", padding:"5rem 1.5rem" }}>
+      <div style={{ maxWidth:1100, margin:"0 auto" }}>
+        <div className="reveal" style={{ display:"flex", alignItems:"flex-end", justifyContent:"space-between", marginBottom:"3rem", flexWrap:"wrap", gap:"1rem" }}>
+          <div>
+            <div style={{ fontFamily:F.ui, fontSize:"0.65rem", letterSpacing:"0.35em", textTransform:"uppercase", color:C.dim, marginBottom:"0.6rem", fontWeight:600 }}>Los Constructores</div>
+            <h2 style={{ fontFamily:F.display, fontSize:"clamp(2rem,5vw,4rem)", lineHeight:0.9 }}>THE BUILDERS.</h2>
+          </div>
+          <p style={{ maxWidth:380, fontFamily:F.body, fontSize:"0.92rem", lineHeight:1.7, color:C.dim }}>Four people. Four gifts. One field. The most powerful thing you can build is something your community actually needs.</p>
+        </div>
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:"1px", background:"#1a1a1a" }}>
+          {TEAM.map(m => (
+            <div key={m.name} className="tc" style={{ background:C.black, padding:"2rem 1.5rem", position:"relative", overflow:"hidden" }}>
+              <div className="bar" style={{ position:"absolute", bottom:0, left:0, right:0, height:2, background:m.color, transform:"scaleX(0)", transformOrigin:"left", transition:"transform .4s ease" }}/>
+              <span style={{ fontSize:"2rem", display:"block", marginBottom:"1.2rem" }}>{m.glyph}</span>
+              <div style={{ fontFamily:F.ui, fontSize:"0.6rem", letterSpacing:"0.3em", textTransform:"uppercase", color:m.color, fontWeight:700, marginBottom:"0.4rem" }}>{m.role}</div>
+              <h3 style={{ fontFamily:F.display, fontSize:"1.4rem", color:C.white, lineHeight:1, marginBottom:"0.8rem" }}>{m.name}</h3>
+              <p style={{ fontFamily:F.body, fontSize:"0.82rem", lineHeight:1.7, color:C.dim, marginBottom:"1rem" }}>{m.desc}</p>
+              <div style={{ fontFamily:F.ui, fontSize:"0.72rem", lineHeight:1.85, color:m.color, fontWeight:600, textTransform:"uppercase", letterSpacing:"0.05em", opacity:0.8, whiteSpace:"pre-line" }}>{m.gift}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Phases() {
+  return (
+    <section id="phases" style={{ padding:"5rem 1.5rem", maxWidth:1100, margin:"0 auto" }}>
+      <div className="reveal" style={{ marginBottom:"3rem" }}>
+        <div style={{ fontFamily:F.ui, fontSize:"0.65rem", letterSpacing:"0.35em", textTransform:"uppercase", color:C.dim, marginBottom:"0.6rem", fontWeight:600 }}>La Hoja de Ruta / The Roadmap</div>
+        <h2 style={{ fontFamily:F.display, fontSize:"clamp(2rem,5vw,4rem)", lineHeight:0.9, marginBottom:"0.5rem" }}>THREE PHASES.</h2>
+        <p style={{ fontFamily:F.body, fontSize:"0.9rem", color:C.dim, lineHeight:1.6 }}>One trajectory. From a field in Fort Worth to a model communities can replicate and make their own.</p>
+      </div>
+      {PHASES.map((phase,pi) => (
+        <div key={phase.num} className="reveal" style={{ display:"grid", gridTemplateColumns:"140px 1fr", borderTop:"1px solid #1a1a1a", ...(pi===PHASES.length-1?{borderBottom:"1px solid #1a1a1a"}:{}) }}>
+          <div style={{ padding:"2rem 1rem 2rem 0", display:"flex", flexDirection:"column", justifyContent:"center", borderRight:"1px solid #1a1a1a" }}>
+            <div style={{ fontFamily:F.display, fontSize:"0.8rem", letterSpacing:"0.15em", color:phase.color }}>{phase.num}</div>
+            <div style={{ fontFamily:F.ui, fontSize:"0.6rem", letterSpacing:"0.2em", textTransform:"uppercase", color:C.dim, marginTop:"0.2rem", whiteSpace:"pre-line" }}>{phase.tag}</div>
+          </div>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)" }}>
+            {phase.items.map((item,ii) => (
+              <div key={item.name} className="pi" style={{ padding:"2rem 1.5rem", borderRight:ii<2?"1px solid #1a1a1a":"none" }}>
+                <div style={{ fontFamily:F.ui, fontSize:"1rem", fontWeight:700, color:C.white, textTransform:"uppercase", letterSpacing:"0.05em", marginBottom:"0.5rem" }}>{item.name}</div>
+                <p style={{ fontFamily:F.body, fontSize:"0.8rem", color:C.dim, lineHeight:1.65 }}>{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </section>
+  );
+}
+
+function Closing() {
+  return (
+    <section id="closing" style={{ background:C.red, padding:"6rem 1.5rem", textAlign:"center", position:"relative", overflow:"hidden" }}>
+      <div style={{ position:"absolute", top:"50%", left:"50%", transform:"translate(-50%,-50%)", fontFamily:F.display, fontSize:"40vw", color:"rgba(255,255,255,0.04)", pointerEvents:"none", lineHeight:1, userSelect:"none" }}>★</div>
+      <div className="reveal" style={{ maxWidth:800, margin:"0 auto", position:"relative", zIndex:1 }}>
+        <h2 style={{ fontFamily:F.display, fontSize:"clamp(2.5rem,6vw,5rem)", lineHeight:0.92, color:C.white, marginBottom:"1.2rem" }}>THE FIELD IS OURS.</h2>
+        <p style={{ fontFamily:F.ui, fontSize:"clamp(1.1rem,2.5vw,1.8rem)", fontStyle:"italic", color:"rgba(255,255,255,0.7)", marginBottom:"2.5rem", lineHeight:1.5, fontWeight:400 }}>
+          Bring your team or como solo.<br/>
+          1201 E Maddox Ave, Fort Worth, TX<br/>
+          Free Pickup — Viernes / Fridays 7PM
+        </p>
+        <div style={{ fontFamily:F.ui, fontSize:"0.7rem", letterSpacing:"0.3em", textTransform:"uppercase", color:"rgba(255,255,255,0.5)", lineHeight:2 }}>
+          Rebelz Fútbol Community ★ Fort Worth, Texas ★ Est. 2026<br/>
+          Season 1 Starts April 27, 2026 ★ 6 Weeks Before The World Cup
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Footer() {
+  return (
+    <footer style={{ background:C.black, borderTop:"1px solid #1a1a1a", padding:"2rem 1.5rem", display:"flex", alignItems:"center", justifyContent:"space-between", flexWrap:"wrap", gap:"1rem" }}>
+      <div style={{ fontFamily:F.display, fontSize:"1rem", color:C.white, letterSpacing:"0.05em" }}>REBELZ<span style={{ color:C.red }}>★</span>FÚTBOL</div>
+      <div style={{ display:"flex", gap:"1.5rem" }}>
+        {[["Leagues","#how"],["Free Programs","#free"],["Mutual Aid","#fund"],["El Team","#team"]].map(([l,h]) =>
+          <a key={h} href={h} className="na" style={{ fontSize:"0.65rem" }}>{l}</a>
+        )}
+      </div>
+      <div style={{ fontFamily:F.ui, fontSize:"0.65rem", letterSpacing:"0.15em", color:C.dim, textTransform:"uppercase" }}>1201 E Maddox Ave · Fort Worth TX</div>
+    </footer>
+  );
+}
+
+export default function RebelzFutbol() {
+  useReveal();
+  return (
+    <>
+      <style>{GLOBAL}</style>
+      <div style={{ background:C.black, color:C.white, minHeight:"100vh", overflowX:"hidden" }}>
+        <Nav />
+        <Hero />
+        <Ticker />
+        <Statement />
+        <div style={{ borderTop:"1px solid #1a1a1a" }} />
+        <HowWeDoIt />
+        <div style={{ borderTop:"1px solid #1a1a1a" }} />
+        <FreeSection />
+        <Fund />
+        <div style={{ borderTop:"1px solid #1a1a1a" }} />
+        <Team />
+        <div style={{ borderTop:"1px solid #1a1a1a" }} />
+        <Phases />
+        <Closing />
+        <Footer />
+      </div>
+    </>
+  );
+}
