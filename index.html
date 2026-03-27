@@ -1,378 +1,548 @@
-import { useEffect } from "react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rebelz Fútbol — La Visión</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<style>
 
-const C = {
-  black: "#0a0a0a", white: "#f0ece4", red: "#d42b2b",
-  gold: "#d4a520",  gray:  "#2a2a2a", mid: "#555555", dim: "#888888",
-};
-const F = {
-  display: "'Black Han Sans', sans-serif",
-  ui:      "'Barlow Condensed', sans-serif",
-  body:    "'Barlow', sans-serif",
-};
-
-const GLOBAL = `
-  @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Barlow:wght@400;500&display=swap');
-  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;}
-  .reveal.vis{opacity:1;transform:translateY(0);}
-  .na{font-family:${F.ui};font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:${C.dim};text-decoration:none;transition:color .2s;}
-  .na:hover{color:${C.white};}
-  .rb{transition:background .25s;}
-  .rb:hover{background:#111!important;}
-  .rb:hover .bar{transform:scaleX(1)!important;}
-  .tc{transition:background .25s;}
-  .tc:hover{background:#0f0f0f!important;}
-  .tc:hover .bar{transform:scaleX(1)!important;}
-  .pi{transition:background .2s;}
-  .pi:hover{background:#0d0d0d!important;}
-  @keyframes tk{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-  .tk{animation:tk 22s linear infinite;display:inline-flex;}
-`;
-
-const LEAGUES = [
-  { night:"MON", day:"Lunes",     name:"Men's 5v5 Futsal",      fee:"$65/player · 8 teams · 1 ref", annual:"$10,400 / yr", color:"#2a5298" },
-  { night:"TUE", day:"Martes",    name:"Coed 5v5 Futsal",       fee:"$65/player · 8 teams · 1 ref", annual:"$10,400 / yr", color:"#6b46c1" },
-  { night:"WED", day:"Miércoles", name:"Men's 5v5 Small Goals",  fee:"$65/player · 8 teams · 1 ref", annual:"$10,400 / yr", color:"#1a6635" },
-  { night:"THU", day:"Jueves",    name:"Cash Prize League",      fee:"$500/team · $3K prize · 2 refs",annual:"$4,000 net/yr",color:"#d4a520" },
-  { night:"FRI", day:"Viernes",   name:"Outdoor 7v7 Mens",       fee:"$65/player · 8 teams · 1 ref", annual:"$14,560 / yr", color:"#d42b2b" },
-];
-const FREE_ITEMS = [
-  { icon:"⚽", title:"Free Pickup Fridays", body:"No sign-up. No fee. Show up and play. Friday 7PM. Forever." },
-  { icon:"🩺", title:"Health Clinics",      body:"Free screenings, mental health access, body literacy. The field as healing." },
-  { icon:"👟", title:"Youth Academy",        body:"Skills development. Coaching certs for community. No cost to participate." },
-  { icon:"⬡",  title:"Mutual Aid Fund",     body:"Rent. Food. Emergency support. 10% of net profit. Back to the neighborhood." },
-];
-const TEAM = [
-  { glyph:"", role:"The Storyteller",  name:"Daniel Garcia Rodriguez", color:"#e8f4ea",
-    desc:"Before you build anything, you must first listen. Mandar obedeciendo.",
-    gift:"Gift: Makes people feel seen\nMove: Conversations → manifestos" },
-  { glyph:"", role:"Math & Mechanics",     name:"Henry Alvarez",      color:"#e8f4ea",
-    desc:"A heart rooted in love, a mind that sees systems — and builds them to free people, not constrain them.",
-    gift:"Gift: Makes complexity legible\nMove: Numbers → poems" },
-  { glyph:"", role:"Architecture & Space", name:"Fernando Olmedo Rivera",     color:"#e8f4ea",
-    desc:"Dreams of a world connected and thriving amongst nature. Every space is a decision that reveals what we value.",
-    gift:"Gift: Sees what could be\nMove: Blueprint → ecosystem" },
-  { glyph:"", role:"Health Justice",        name:"Oscar Enriquez",    color:"#e8f4ea",
-    desc:"Knows healing happens in community, on fields, through joy. Holds the political and the personal at once.",
-    gift:"Gift: Political + personal\nMove: Clinic → commons" },
-];
-const PHASES = [
-  { num:"01", tag:"Foundation\n2026", color:C.gold, items:[
-    { name:"Weekday Leagues",      desc:"Mon–Fri, 7–11PM. Five nights, five formats. The revenue engine." },
-    { name:"Free Pickup Fridays",  desc:"No registration. No fee. Cross-subsidized by league revenue." },
-    { name:"Rebelz Health Clinic", desc:"Free screenings on-site. MD, RD, PT — community-embedded care." },
-  ]},
-  { num:"02", tag:"Expansion\n2027", color:C.white, items:[
-    { name:"Weekend Divisions",    desc:"8AM–10PM Sat & Sun. Youth, women's, 40+, competitive open." },
-    { name:"Mutual Aid Live",      desc:"Fund fully operational. Money flowing back to the neighborhood." },
-    { name:"Gym & Membership",     desc:"Access, jerseys, exclusive classes, seasonal tournaments." },
-  ]},
-  { num:"03", tag:"Legacy\n2028+",   color:C.red, items:[
-    { name:"Youth Academy",        desc:"Skills development. Coaching certs. Pathways that didn't exist." },
-    { name:"Physical Facility",    desc:"A permanent home. Bodega, café, community space, field." },
-    { name:"Replicable Model",     desc:"Open-source tools to help other communities build this too." },
-  ]},
-];
-
-function useReveal() {
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("vis"); }),
-      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
-    );
-    document.querySelectorAll(".reveal").forEach(el => obs.observe(el));
-    return () => obs.disconnect();
-  }, []);
+/* ── TOKENS ──────────────────────────────────────────────── */
+:root {
+  --black:  #0a0a0a;
+  --white:  #f0ece4;
+  --red:    #d42b2b;
+  --gold:   #d4a520;
+  --gray:   #2a2a2a;
+  --mid:    #555555;
+  --dim:    #888888;
+  --D:      'Black Han Sans', sans-serif;
+  --U:      'Barlow Condensed', sans-serif;
+  --B:      'Barlow', sans-serif;
 }
 
-function Nav() {
-  return (
-    <nav style={{ position:"fixed", top:0, left:0, right:0, zIndex:100, display:"flex", alignItems:"center", justifyContent:"space-between", padding:"1rem 1.5rem", background:"rgba(10,10,10,0.92)", backdropFilter:"blur(8px)", borderBottom:"1px solid #1a1a1a" }}>
-      <a href="#hero" style={{ fontFamily:F.display, fontSize:"1.2rem", letterSpacing:"0.06em", color:C.white, textDecoration:"none" }}>
-        REBELZ<span style={{ color:C.red }}>★</span>FÚTBOL
-      </a>
-      <div style={{ display:"flex", gap:"2rem" }}>
-        {[["How We Do It","#how"],["The Fund","#fund"],["El Team","#team"],["Phases","#phases"]].map(([l,h]) =>
-          <a key={h} href={h} className="na">{l}</a>
-        )}
+/* ── RESET ───────────────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--black); color: var(--white); font-family: 'Barlow', sans-serif; overflow-x: hidden; }
+a { text-decoration: none; }
+p { font-family: 'Barlow', sans-serif; }
+
+/* ── REVEAL ──────────────────────────────────────────────── */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+.reveal.vis { opacity: 1; transform: translateY(0); }
+
+/* ── SHARED ──────────────────────────────────────────────── */
+.label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: .65rem; font-weight: 600;
+  letter-spacing: .35em; text-transform: uppercase;
+  color: var(--dim);
+}
+.divider { border: none; border-top: 1px solid #1a1a1a; }
+.section-inner { max-width: 1100px; margin: 0 auto; width: 100%; padding: 0 1.5rem; }
+
+/* ── NAV ─────────────────────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: rgba(10,10,10,.92); backdrop-filter: blur(8px);
+  border-bottom: 1px solid #1a1a1a;
+}
+.nav-logo { font-family: 'Black Han Sans', sans-serif; font-size: 1.2rem; letter-spacing: .06em; color: var(--white); }
+.nav-logo span { color: var(--red); }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a { font-family: 'Barlow Condensed', sans-serif; font-size: .72rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--dim); transition: color .2s; }
+.nav-links a:hover { color: var(--white); }
+.nav-cta { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; color: var(--black); background: var(--red); padding: .45rem 1.1rem; transition: background .2s; }
+.nav-cta:hover { background: #ff3333; }
+
+/* ── HERO ────────────────────────────────────────────────── */
+#hero {
+  min-height: 100vh; display: flex; flex-direction: column;
+  justify-content: flex-end; padding: 60px 1.5rem 3rem;
+  position: relative; overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 80%, #0d2b16 0%, #060f0a 60%, #000 100%);
+  z-index: 0;
+}
+.hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, rgba(10,10,10,.3) 0%, rgba(10,10,10,.7) 60%, #0a0a0a 100%);
+  z-index: 1;
+}
+.hero-content { position: relative; z-index: 2; max-width: 1100px; margin: 0 auto; width: 100%; }
+.hero-eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: .7rem; font-weight: 700; letter-spacing: .4em; text-transform: uppercase; color: var(--red); margin-bottom: .8rem; }
+.hero-h1 { font-family: 'Black Han Sans', sans-serif; font-size: clamp(4.5rem, 14vw, 11rem); line-height: .88; letter-spacing: -.01em; text-transform: uppercase; }
+.hero-h1 .stroke { -webkit-text-stroke: 2px var(--white); color: transparent; display: block; }
+.hero-h1 .solid-red { color: var(--red); display: block; }
+.hero-sub { margin-top: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; max-width: 700px; }
+.hero-sub p { font-size: clamp(1rem, 2vw, 1.25rem); line-height: 1.55; font-style: italic; }
+.hero-sub .en { color: rgba(240,236,228,.75); }
+.hero-sub .es { color: var(--dim); font-size: clamp(.9rem, 1.8vw, 1.1rem); }
+.hero-meta { margin-top: 2.5rem; display: flex; align-items: center; gap: 1.5rem; }
+.hero-meta span { font-family: 'Barlow Condensed', sans-serif; font-size: .72rem; font-weight: 600; letter-spacing: .25em; text-transform: uppercase; color: var(--dim); }
+.dot { width: 4px; height: 4px; border-radius: 50%; background: var(--red); flex-shrink: 0; }
+
+/* ── TICKER ──────────────────────────────────────────────── */
+.ticker-wrap { background: var(--red); padding: .65rem 0; overflow: hidden; white-space: nowrap; }
+.ticker-inner { display: inline-flex; animation: ticker 22s linear infinite; }
+.ticker-item { font-family: 'Black Han Sans', sans-serif; font-size: .85rem; letter-spacing: .12em; text-transform: uppercase; color: var(--white); padding: 0 2.5rem; }
+.ticker-sep { color: rgba(255,255,255,.4); padding: 0 .5rem; }
+@keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* ── STATEMENT ───────────────────────────────────────────── */
+#statement { padding: 6rem 1.5rem; }
+.statement-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 4rem; align-items: start; }
+.statement-num { font-family: 'Black Han Sans', sans-serif; font-size: 8rem; line-height: .85; color: #1a1a1a; user-select: none; margin-top: .5rem; }
+.pull-quote { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: clamp(2rem, 4.5vw, 3.5rem); line-height: 1.1; color: var(--white); }
+.pull-quote em { color: var(--gold); font-style: italic; }
+.pull-quote-es { font-family: 'Barlow Condensed', sans-serif; font-style: italic; font-size: clamp(1.1rem, 2vw, 1.4rem); color: var(--dim); line-height: 1.6; border-left: 2px solid #222; padding-left: 1rem; }
+
+/* ── HOW ─────────────────────────────────────────────────── */
+#how { padding: 5rem 1.5rem; border-top: 1px solid #1a1a1a; }
+.how-header { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 4rem; align-items: end; }
+.how-title { font-family: 'Black Han Sans', sans-serif; font-size: clamp(2.5rem, 6vw, 5rem); line-height: .9; }
+.how-title .outline { display: block; -webkit-text-stroke: 1.5px var(--white); color: transparent; }
+.how-title .solid { display: block; color: var(--white); }
+.how-intro { font-size: clamp(1rem, 1.8vw, 1.15rem); line-height: 1.7; color: var(--dim); }
+.how-intro strong { color: var(--white); }
+.rev-grid { display: grid; grid-template-columns: repeat(5, 1fr); border: 1px solid #1a1a1a; }
+.rev-block { padding: 1.8rem 1.2rem; border-right: 1px solid #1a1a1a; position: relative; transition: background .25s; cursor: default; }
+.rev-block:last-child { border-right: none; }
+.rev-block:hover { background: #111; }
+.rev-bar { position: absolute; top: 0; left: 0; right: 0; height: 3px; transform: scaleX(0); transform-origin: left; transition: transform .35s ease; }
+.rev-block:hover .rev-bar { transform: scaleX(1); }
+.rev-night { font-family: 'Black Han Sans', sans-serif; font-size: 1.6rem; letter-spacing: .03em; margin-bottom: .2rem; }
+.rev-day { font-family: 'Barlow Condensed', sans-serif; font-size: .62rem; font-weight: 600; letter-spacing: .25em; text-transform: uppercase; color: var(--dim); margin-bottom: .8rem; }
+.rev-name { font-family: 'Barlow Condensed', sans-serif; font-size: .88rem; font-weight: 700; color: var(--white); line-height: 1.3; margin-bottom: .5rem; }
+.rev-fee { font-family: 'Barlow Condensed', sans-serif; font-size: .78rem; color: var(--dim); line-height: 1.5; }
+.rev-annual { margin-top: 1rem; padding-top: .8rem; border-top: 1px solid #1a1a1a; font-family: 'Barlow Condensed', sans-serif; font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.rev-total { display: flex; justify-content: flex-end; align-items: center; gap: 1rem; margin-top: 1rem; }
+.rev-total-num { font-family: 'Black Han Sans', sans-serif; font-size: 2rem; color: var(--white); }
+
+/* ── FREE ────────────────────────────────────────────────── */
+#free { background: var(--gray); padding: 5rem 1.5rem; margin: 4rem 0; position: relative; overflow: hidden; }
+#free::before { content: 'FREE'; font-family: 'Black Han Sans', sans-serif; font-size: 28vw; position: absolute; right: -2vw; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,.03); pointer-events: none; line-height: 1; user-select: none; }
+.free-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; position: relative; z-index: 1; }
+.free-kicker { font-family: 'Barlow Condensed', sans-serif; font-size: .68rem; font-weight: 700; letter-spacing: .4em; text-transform: uppercase; color: var(--gold); margin-bottom: .8rem; }
+.free-title { font-family: 'Black Han Sans', sans-serif; font-size: clamp(2.5rem, 5vw, 4.5rem); line-height: .92; color: var(--white); margin-bottom: 1.5rem; }
+.free-body { font-size: 1.05rem; line-height: 1.75; color: rgba(240,236,228,.7); margin-bottom: 1rem; }
+.free-body-es { font-size: .9rem; line-height: 1.7; color: var(--dim); font-style: italic; }
+.free-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: #333; }
+.free-card { background: #2a2a2a; padding: 1.5rem 1.2rem; }
+.free-icon { font-size: 1.6rem; display: block; margin-bottom: .6rem; }
+.free-card-title { font-family: 'Barlow Condensed', sans-serif; font-size: .95rem; font-weight: 700; color: var(--white); text-transform: uppercase; letter-spacing: .05em; margin-bottom: .3rem; }
+.free-card-body { font-size: .8rem; color: var(--dim); line-height: 1.6; }
+
+/* ── FUND ────────────────────────────────────────────────── */
+#fund { padding: 6rem 1.5rem; }
+.fund-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 5rem; align-items: center; }
+.fund-tag { display: inline-flex; background: var(--red); padding: .25rem .7rem; margin-bottom: 1.2rem; font-family: 'Barlow Condensed', sans-serif; font-size: .65rem; font-weight: 700; letter-spacing: .25em; text-transform: uppercase; color: var(--white); }
+.fund-title { font-family: 'Black Han Sans', sans-serif; font-size: clamp(2.2rem, 5vw, 4rem); line-height: .92; color: var(--white); margin-bottom: 1.5rem; }
+.fund-title .outline { display: block; -webkit-text-stroke: 1.5px var(--white); color: transparent; }
+.fund-body { font-size: 1rem; line-height: 1.8; color: rgba(240,236,228,.7); margin-bottom: .8rem; }
+.fund-body strong { color: var(--white); }
+.fund-body-es { font-size: .85rem; line-height: 1.7; color: var(--dim); font-style: italic; }
+.fund-stat { padding: 1.8rem 0; border-bottom: 1px solid #1a1a1a; }
+.fund-stat:first-child { border-top: 1px solid #1a1a1a; }
+.fs-num { font-family: 'Black Han Sans', sans-serif; font-size: 3rem; color: var(--gold); line-height: 1; margin-bottom: .3rem; }
+.fs-label { font-family: 'Barlow Condensed', sans-serif; font-size: .78rem; font-weight: 700; color: var(--white); text-transform: uppercase; letter-spacing: .1em; margin-bottom: .2rem; }
+.fs-sub { font-size: .78rem; color: var(--dim); line-height: 1.5; }
+
+/* ── TEAM ────────────────────────────────────────────────── */
+#team { background: #0d0d0d; border-top: 1px solid #1a1a1a; padding: 5rem 1.5rem; }
+.team-hdr { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem; }
+.team-title { font-family: 'Black Han Sans', sans-serif; font-size: clamp(2rem, 5vw, 4rem); line-height: .9; }
+.team-intro { max-width: 380px; font-size: .92rem; line-height: 1.7; color: var(--dim); }
+.team-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: #1a1a1a; }
+.tc { background: var(--black); padding: 2rem 1.5rem; position: relative; overflow: hidden; transition: background .25s; cursor: default; }
+.tc:hover { background: #0f0f0f; }
+.tc-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 2px; transform: scaleX(0); transform-origin: left; transition: transform .4s ease; }
+.tc:hover .tc-bar { transform: scaleX(1); }
+.tc-glyph { font-size: 2rem; display: block; margin-bottom: 1.2rem; }
+.tc-role { font-family: 'Barlow Condensed', sans-serif; font-size: .6rem; font-weight: 700; letter-spacing: .3em; text-transform: uppercase; margin-bottom: .4rem; }
+.tc-name { font-family: 'Black Han Sans', sans-serif; font-size: 1.4rem; color: var(--white); line-height: 1; margin-bottom: .8rem; }
+.tc-desc { font-size: .82rem; line-height: 1.7; color: var(--dim); margin-bottom: 1rem; }
+.tc-gift { font-family: 'Barlow Condensed', sans-serif; font-size: .72rem; font-weight: 600; line-height: 1.85; text-transform: uppercase; letter-spacing: .05em; opacity: .8; white-space: pre-line; }
+
+/* ── PHASES ──────────────────────────────────────────────── */
+#phases { padding: 5rem 1.5rem; }
+.phases-hdr { margin-bottom: 3rem; }
+.phases-title { font-family: 'Black Han Sans', sans-serif; font-size: clamp(2rem, 5vw, 4rem); line-height: .9; margin-bottom: .5rem; }
+.phases-sub { font-size: .9rem; color: var(--dim); line-height: 1.6; }
+.phase-row { display: grid; grid-template-columns: 140px 1fr; border-top: 1px solid #1a1a1a; }
+.phase-row:last-child { border-bottom: 1px solid #1a1a1a; }
+.phase-num-col { padding: 2rem 1rem 2rem 0; display: flex; flex-direction: column; justify-content: center; border-right: 1px solid #1a1a1a; }
+.phase-num { font-family: 'Black Han Sans', sans-serif; font-size: .8rem; letter-spacing: .15em; }
+.phase-tag { font-family: 'Barlow Condensed', sans-serif; font-size: .6rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--dim); margin-top: .2rem; white-space: pre-line; }
+.phase-items { display: grid; grid-template-columns: repeat(3, 1fr); }
+.pi { padding: 2rem 1.5rem; border-right: 1px solid #1a1a1a; transition: background .2s; cursor: default; }
+.pi:last-child { border-right: none; }
+.pi:hover { background: #0d0d0d; }
+.pi-name { font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; color: var(--white); text-transform: uppercase; letter-spacing: .05em; margin-bottom: .5rem; }
+.pi-desc { font-size: .8rem; color: var(--dim); line-height: 1.65; }
+
+/* ── CLOSING ─────────────────────────────────────────────── */
+#closing { background: var(--red); padding: 6rem 1.5rem; text-align: center; position: relative; overflow: hidden; }
+#closing::before { content: '★'; font-family: 'Black Han Sans', sans-serif; font-size: 40vw; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(255,255,255,.04); pointer-events: none; line-height: 1; user-select: none; }
+.closing-inner { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+.closing-title { font-family: 'Black Han Sans', sans-serif; font-size: clamp(2.5rem, 6vw, 5rem); line-height: .92; color: var(--white); margin-bottom: 1.2rem; }
+.closing-sub { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(1.1rem, 2.5vw, 1.8rem); font-style: italic; color: rgba(255,255,255,.7); line-height: 1.5; font-weight: 400; margin-bottom: 2.5rem; }
+.closing-meta { font-family: 'Barlow Condensed', sans-serif; font-size: .7rem; letter-spacing: .3em; text-transform: uppercase; color: rgba(255,255,255,.5); line-height: 2; }
+
+/* ── FOOTER ──────────────────────────────────────────────── */
+footer { background: var(--black); border-top: 1px solid #1a1a1a; padding: 2rem 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+.footer-logo { font-family: 'Black Han Sans', sans-serif; font-size: 1rem; color: var(--white); letter-spacing: .05em; }
+.footer-logo span { color: var(--red); }
+.footer-links { display: flex; gap: 1.5rem; list-style: none; }
+.footer-links a { font-family: 'Barlow Condensed', sans-serif; font-size: .65rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--dim); transition: color .2s; }
+.footer-links a:hover { color: var(--white); }
+.footer-address { font-family: 'Barlow Condensed', sans-serif; font-size: .65rem; letter-spacing: .15em; color: var(--dim); text-transform: uppercase; }
+
+/* ── RESPONSIVE ──────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .statement-grid, .how-header, .free-inner, .fund-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .rev-grid { grid-template-columns: 1fr 1fr; }
+  .team-cards { grid-template-columns: 1fr 1fr; }
+  .phase-items { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+  .hero-sub { grid-template-columns: 1fr; }
+}
+@media (max-width: 580px) {
+  .team-cards, .rev-grid, .free-cards { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">REBELZ<span>★</span>FÚTBOL</a>
+  <ul class="nav-links">
+    <li><a href="#how">How We Do It</a></li>
+    <li><a href="#fund">The Fund</a></li>
+    <li><a href="#team">El Team</a></li>
+    <li><a href="#phases">Phases</a></li>
+  </ul>
+  <a href="#closing" class="nav-cta">Get Involved</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Fort Worth, TX · Est. 2026 · 1201 E Maddox Ave</div>
+    <h1 class="hero-h1">
+      <span class="stroke">REBELZ</span>
+      <span class="solid-red">FÚTBOL</span>
+    </h1>
+    <div class="hero-sub">
+      <p class="en">Where the field becomes something bigger than the game.</p>
+      <p class="es">Donde el campo es más que el juego.</p>
+    </div>
+    <div class="hero-meta">
+      <span>Free Pickup Fridays · 7PM</span>
+      <div class="dot"></div>
+      <span>Leagues Starting April 2026</span>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap" aria-hidden="true">
+  <div class="ticker-inner" id="ticker"></div>
+</div>
+
+<!-- STATEMENT -->
+<section id="statement">
+  <div class="section-inner">
+    <div class="statement-grid reveal">
+      <div>
+        <div class="label" style="margin-bottom:.5rem">The Dream / El Sueño</div>
+        <div class="statement-num">01</div>
       </div>
-      <a href="#closing" style={{ fontFamily:F.ui, fontWeight:700, fontSize:"0.7rem", letterSpacing:"0.15em", textTransform:"uppercase", color:C.black, background:C.red, padding:"0.45rem 1.1rem", textDecoration:"none" }}>
-        Get Involved
-      </a>
-    </nav>
-  );
-}
-
-function Hero() {
-  return (
-    <section id="hero" style={{ minHeight:"100vh", display:"flex", flexDirection:"column", justifyContent:"flex-end", padding:"60px 1.5rem 3rem", position:"relative", overflow:"hidden" }}>
-      <div style={{ position:"absolute", inset:0, background:"radial-gradient(ellipse at 50% 80%, #0d2b16 0%, #060f0a 60%, #000 100%)", zIndex:0 }}/>
-      <div style={{ position:"absolute", inset:0, background:"linear-gradient(to bottom, rgba(10,10,10,0.3) 0%, rgba(10,10,10,0.7) 60%, #0a0a0a 100%)", zIndex:1 }}/>
-      <div style={{ position:"relative", zIndex:2, maxWidth:1100, margin:"0 auto", width:"100%" }}>
-        <div style={{ fontFamily:F.ui, fontSize:"0.7rem", letterSpacing:"0.4em", textTransform:"uppercase", color:C.red, fontWeight:700, marginBottom:"0.8rem" }}>Fort Worth, TX · Est. 2026 · 1201 E Maddox Ave</div>
-        <h1 style={{ fontFamily:F.display, fontSize:"clamp(4.5rem,14vw,11rem)", lineHeight:0.88, letterSpacing:"-0.01em", textTransform:"uppercase" }}>
-          <span style={{ WebkitTextStroke:`2px ${C.white}`, color:"transparent", display:"block" }}>REBELZ</span>
-          <span style={{ color:C.red, display:"block" }}>FÚTBOL</span>
-        </h1>
-        <div style={{ marginTop:"1.5rem", display:"grid", gridTemplateColumns:"1fr 1fr", gap:"1rem", maxWidth:700 }}>
-          <p style={{ fontFamily:F.body, fontSize:"clamp(1rem,2vw,1.25rem)", lineHeight:1.55, color:"rgba(240,236,228,0.75)", fontStyle:"italic" }}>Where the field becomes something bigger than the game.</p>
-          <p style={{ fontFamily:F.body, fontSize:"clamp(0.9rem,1.8vw,1.1rem)", lineHeight:1.55, color:C.dim, fontStyle:"italic" }}>Donde el campo es más que el juego.</p>
-        </div>
-        <div style={{ marginTop:"2.5rem", display:"flex", alignItems:"center", gap:"1.5rem" }}>
-          <span style={{ fontFamily:F.ui, fontSize:"0.72rem", letterSpacing:"0.25em", textTransform:"uppercase", color:C.dim, fontWeight:600 }}>Free Pickup Fridays · 7PM</span>
-          <span style={{ width:4, height:4, borderRadius:"50%", background:C.red, display:"inline-block" }}/>
-          <span style={{ fontFamily:F.ui, fontSize:"0.72rem", letterSpacing:"0.25em", textTransform:"uppercase", color:C.dim, fontWeight:600 }}>Leagues Starting April 2026</span>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Ticker() {
-  const items = ["FREE 4 EVERYONE","RETAS PARA TODOS","COMMUNITY FIRST","LA COMUNIDAD PRIMERO","BRING YOUR TEAM OR COME SOLO","FORT WORTH FÚTBOL"];
-  return (
-    <div style={{ background:C.red, padding:"0.65rem 0", overflow:"hidden", whiteSpace:"nowrap" }}>
-      <div className="tk">
-        {[...items,...items].map((item,i) => (
-          <span key={i} style={{ fontFamily:F.display, fontSize:"0.85rem", letterSpacing:"0.12em", textTransform:"uppercase", color:C.white, padding:"0 2.5rem" }}>
-            {item} <span style={{ color:"rgba(255,255,255,0.4)", padding:"0 0.5rem" }}>★</span>
-          </span>
-        ))}
+      <div style="display:flex;flex-direction:column;gap:2rem">
+        <p class="pull-quote">
+          A soccer field where your zip code doesn't determine your access. Where your body is welcomed. Where <em>your culture is the center.</em>
+        </p>
+        <p class="pull-quote-es">
+          Un campo de fútbol donde tu código postal no determina tu acceso. Donde tu cultura es el centro.
+        </p>
       </div>
     </div>
-  );
-}
+  </div>
+</section>
 
-function Statement() {
-  return (
-    <section id="statement" style={{ padding:"6rem 1.5rem", maxWidth:1100, margin:"0 auto" }}>
-      <div className="reveal" style={{ display:"grid", gridTemplateColumns:"1fr 2fr", gap:"4rem", alignItems:"start" }}>
-        <div>
-          <div style={{ fontFamily:F.ui, fontSize:"0.65rem", letterSpacing:"0.35em", textTransform:"uppercase", color:C.dim, marginBottom:"0.5rem", fontWeight:600 }}>The Dream / El Sueño</div>
-          <div style={{ fontFamily:F.display, fontSize:"8rem", lineHeight:0.85, color:"#1a1a1a", userSelect:"none" }}>01</div>
-        </div>
-        <div style={{ display:"flex", flexDirection:"column", gap:"2rem" }}>
-          <p style={{ fontFamily:F.ui, fontWeight:700, fontSize:"clamp(2rem,4.5vw,3.5rem)", lineHeight:1.1, color:C.white }}>
-            A soccer field where your zip code doesn't determine your access. Where your body is welcomed. Where <em style={{ color:C.gold }}>your culture is the center.</em>
-          </p>
-          <p style={{ fontFamily:F.ui, fontStyle:"italic", fontSize:"clamp(1.1rem,2vw,1.4rem)", color:C.dim, lineHeight:1.6, borderLeft:"2px solid #222", paddingLeft:"1rem" }}>
-            Un campo de fútbol donde tu código postal no determina tu acceso. Donde tu cultura es el centro.
-          </p>
-        </div>
+<hr class="divider">
+
+<!-- HOW WE DO IT -->
+<section id="how">
+  <div class="section-inner">
+    <div class="how-header reveal">
+      <div>
+        <div class="label" style="margin-bottom:.8rem">Cómo lo hacemos / How We Do It</div>
+        <h2 class="how-title">
+          <span class="solid">THE</span>
+          <span class="outline">MONEY</span>
+          <span class="solid">PART</span>
+        </h2>
       </div>
-    </section>
-  );
-}
+      <p class="how-intro">
+        Leagues and tournaments generate the revenue. That revenue funds
+        <strong>free programming</strong>, <strong>the health clinic</strong>, and the
+        <strong>mutual aid fund</strong>. No grants required at launch.
+      </p>
+    </div>
+    <div class="rev-grid reveal" id="rev-grid"></div>
+    <div class="rev-total reveal">
+      <span class="label">Total annual league revenue (Phase 1)</span>
+      <span class="rev-total-num">$49,760</span>
+    </div>
+  </div>
+</section>
 
-function HowWeDoIt() {
-  return (
-    <section id="how" style={{ borderTop:"1px solid #1a1a1a", padding:"5rem 1.5rem", maxWidth:1100, margin:"0 auto" }}>
-      <div className="reveal" style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"2rem", marginBottom:"4rem", alignItems:"end" }}>
-        <div>
-          <div style={{ fontFamily:F.ui, fontSize:"0.65rem", letterSpacing:"0.35em", textTransform:"uppercase", color:C.dim, marginBottom:"0.8rem", fontWeight:600 }}>Cómo lo hacemos / How We Do It</div>
-          <h2 style={{ fontFamily:F.display, fontSize:"clamp(2.5rem,6vw,5rem)", lineHeight:0.9 }}>
-            <span style={{ display:"block", color:C.white }}>THE</span>
-            <span style={{ display:"block", WebkitTextStroke:`1.5px ${C.white}`, color:"transparent" }}>MONEY</span>
-            <span style={{ display:"block", color:C.white }}>PART</span>
-          </h2>
-        </div>
-        <p style={{ fontFamily:F.body, fontSize:"clamp(1rem,1.8vw,1.15rem)", lineHeight:1.7, color:C.dim }}>
-          Leagues and tournaments generate the revenue. That revenue funds <strong style={{ color:C.white }}>free programming</strong>, <strong style={{ color:C.white }}>the health clinic</strong>, and the <strong style={{ color:C.white }}>mutual aid fund</strong>. No grants required at launch.
+<hr class="divider">
+
+<!-- FREE IS THE POINT -->
+<section id="free">
+  <div class="section-inner">
+    <div class="free-inner">
+      <div class="reveal">
+        <div class="free-kicker">Non-Negotiable / No Negociable</div>
+        <h2 class="free-title">FREE IS THE POINT.</h2>
+        <p class="free-body">
+          The leagues cross-subsidize everything free. Revenue from competitive play funds open access for everyone — no registration, no fee, no barrier.
         </p>
+        <p class="free-body-es">Las ligas financian lo gratuito. Ese es el modelo.</p>
       </div>
-      <div className="reveal" style={{ display:"grid", gridTemplateColumns:"repeat(5,1fr)", border:"1px solid #1a1a1a" }}>
-        {LEAGUES.map((l,i) => (
-          <div key={l.night} className="rb" style={{ padding:"1.8rem 1.2rem", borderRight:i<4?"1px solid #1a1a1a":"none", position:"relative" }}>
-            <div className="bar" style={{ position:"absolute", top:0, left:0, right:0, height:3, background:l.color, transform:"scaleX(0)", transformOrigin:"left", transition:"transform .35s ease" }}/>
-            <div style={{ fontFamily:F.display, fontSize:"1.6rem", color:l.color, marginBottom:"0.2rem" }}>{l.night}</div>
-            <div style={{ fontFamily:F.ui, fontSize:"0.62rem", letterSpacing:"0.25em", textTransform:"uppercase", color:C.dim, fontWeight:600, marginBottom:"0.8rem" }}>{l.day}</div>
-            <div style={{ fontFamily:F.ui, fontSize:"0.88rem", fontWeight:700, color:C.white, lineHeight:1.3, marginBottom:"0.5rem" }}>{l.name}</div>
-            <div style={{ fontFamily:F.ui, fontSize:"0.78rem", color:C.dim, lineHeight:1.5 }}>{l.fee}</div>
-            <div style={{ marginTop:"1rem", paddingTop:"0.8rem", borderTop:"1px solid #1a1a1a", fontFamily:F.ui, fontSize:"0.72rem", letterSpacing:"0.1em", color:l.color, fontWeight:700, textTransform:"uppercase" }}>{l.annual}</div>
-          </div>
-        ))}
-      </div>
-      <div style={{ display:"flex", justifyContent:"flex-end", marginTop:"1rem", alignItems:"center", gap:"1rem" }}>
-        <span style={{ fontFamily:F.ui, fontSize:"0.65rem", letterSpacing:"0.35em", textTransform:"uppercase", color:C.dim, fontWeight:600 }}>Total annual league revenue (Phase 1)</span>
-        <span style={{ fontFamily:F.display, fontSize:"2rem", color:C.white }}>$49,760</span>
-      </div>
-    </section>
-  );
-}
+      <div class="free-cards reveal" id="free-cards"></div>
+    </div>
+  </div>
+</section>
 
-function FreeSection() {
-  return (
-    <section id="free" style={{ background:C.gray, padding:"5rem 1.5rem", margin:"4rem 0", position:"relative", overflow:"hidden" }}>
-      <div style={{ position:"absolute", right:"-2vw", top:"50%", transform:"translateY(-50%)", fontFamily:F.display, fontSize:"28vw", color:"rgba(255,255,255,0.03)", pointerEvents:"none", lineHeight:1, userSelect:"none" }}>FREE</div>
-      <div style={{ maxWidth:1100, margin:"0 auto", display:"grid", gridTemplateColumns:"1fr 1fr", gap:"4rem", alignItems:"center", position:"relative", zIndex:1 }}>
-        <div className="reveal">
-          <div style={{ fontFamily:F.ui, fontSize:"0.68rem", letterSpacing:"0.4em", textTransform:"uppercase", color:C.gold, fontWeight:700, marginBottom:"0.8rem" }}>Non-Negotiable / No Negociable</div>
-          <h2 style={{ fontFamily:F.display, fontSize:"clamp(2.5rem,5vw,4.5rem)", lineHeight:0.92, color:C.white, marginBottom:"1.5rem" }}>FREE IS THE POINT.</h2>
-          <p style={{ fontFamily:F.body, fontSize:"1.05rem", lineHeight:1.75, color:"rgba(240,236,228,0.7)", marginBottom:"1rem" }}>The leagues cross-subsidize everything free. Revenue from competitive play funds open access for everyone — no registration, no fee, no barrier.</p>
-          <p style={{ fontFamily:F.body, fontSize:"0.9rem", lineHeight:1.7, color:C.dim, fontStyle:"italic" }}>Las ligas financian lo gratuito. Ese es el modelo.</p>
-        </div>
-        <div className="reveal" style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"1px", background:"#333" }}>
-          {FREE_ITEMS.map(item => (
-            <div key={item.title} style={{ background:"#2a2a2a", padding:"1.5rem 1.2rem" }}>
-              <span style={{ fontSize:"1.6rem", display:"block", marginBottom:"0.6rem" }}>{item.icon}</span>
-              <div style={{ fontFamily:F.ui, fontSize:"0.95rem", fontWeight:700, color:C.white, textTransform:"uppercase", letterSpacing:"0.05em", marginBottom:"0.3rem" }}>{item.title}</div>
-              <p style={{ fontFamily:F.body, fontSize:"0.8rem", color:C.dim, lineHeight:1.6 }}>{item.body}</p>
-            </div>
-          ))}
-        </div>
+<!-- FUND -->
+<section id="fund">
+  <div class="section-inner">
+    <div class="fund-grid">
+      <div class="reveal">
+        <div class="fund-tag">Non-Negotiable ★</div>
+        <h2 class="fund-title">
+          THE FUND<br>
+          <span class="outline">IS THE</span>
+          WHY.
+        </h2>
+        <p class="fund-body">Most organizations treat mutual aid as a nice-to-have. <strong>We built it into the structure from day one.</strong></p>
+        <p class="fund-body">The community fund isn't what we do with profit. It's why we create it. Housed in the nonprofit arm. Protected by design. Governed by the people it serves.</p>
+        <p class="fund-body-es">El fondo no es lo que hacemos con las ganancias. Es la razón por la que las creamos.</p>
       </div>
-    </section>
-  );
-}
+      <div class="reveal" id="fund-stats"></div>
+    </div>
+  </div>
+</section>
 
-function Fund() {
-  return (
-    <section id="fund" style={{ padding:"6rem 1.5rem", maxWidth:1100, margin:"0 auto" }}>
-      <div style={{ display:"grid", gridTemplateColumns:"1.2fr 1fr", gap:"5rem", alignItems:"center" }}>
-        <div className="reveal">
-          <div style={{ display:"inline-flex", background:C.red, padding:"0.25rem 0.7rem", marginBottom:"1.2rem" }}>
-            <span style={{ fontFamily:F.ui, fontSize:"0.65rem", letterSpacing:"0.25em", textTransform:"uppercase", fontWeight:700, color:C.white }}>Non-Negotiable ★</span>
-          </div>
-          <h2 style={{ fontFamily:F.display, fontSize:"clamp(2.2rem,5vw,4rem)", lineHeight:0.92, color:C.white, marginBottom:"1.5rem" }}>
-            <span style={{ display:"block" }}>THE FUND</span>
-            <span style={{ display:"block", WebkitTextStroke:`1.5px ${C.white}`, color:"transparent" }}>IS THE</span>
-            <span style={{ display:"block" }}>WHY.</span>
-          </h2>
-          <p style={{ fontFamily:F.body, fontSize:"1rem", lineHeight:1.8, color:"rgba(240,236,228,0.7)", marginBottom:"0.8rem" }}>Most organizations treat mutual aid as a nice-to-have. <strong style={{ color:C.white }}>We built it into the structure from day one.</strong></p>
-          <p style={{ fontFamily:F.body, fontSize:"1rem", lineHeight:1.8, color:"rgba(240,236,228,0.7)", marginBottom:"0.8rem" }}>The community fund isn't what we do with profit. It's why we create it. Housed in the nonprofit arm. Protected by design. Governed by the people it serves.</p>
-          <p style={{ fontFamily:F.body, fontSize:"0.85rem", lineHeight:1.7, color:C.dim, fontStyle:"italic" }}>El fondo no es lo que hacemos con las ganancias. Es la razón por la que las creamos.</p>
-        </div>
-        <div className="reveal">
-          {[
-            { num:"10%",       label:"Of Net Profit",  sub:"Set aside every season. No exceptions. Back into the community." },
-            { num:"LLC+501c3", label:"Dual-Track",      sub:"Revenue arm funds free programming. Nonprofit arm protects the fund." },
-            { num:"0",         label:"Gatekeepers",     sub:"Disbursement decisions made by the community members who need it most." },
-          ].map((s,i) => (
-            <div key={s.label} style={{ padding:"1.8rem 0", borderBottom:"1px solid #1a1a1a", ...(i===0?{borderTop:"1px solid #1a1a1a"}:{}) }}>
-              <div style={{ fontFamily:F.display, fontSize:"3rem", color:C.gold, lineHeight:1, marginBottom:"0.3rem" }}>{s.num}</div>
-              <div style={{ fontFamily:F.ui, fontSize:"0.78rem", fontWeight:700, color:C.white, textTransform:"uppercase", letterSpacing:"0.1em", marginBottom:"0.2rem" }}>{s.label}</div>
-              <div style={{ fontFamily:F.body, fontSize:"0.78rem", color:C.dim, lineHeight:1.5 }}>{s.sub}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
+<hr class="divider">
 
-function Team() {
-  return (
-    <section id="team" style={{ background:"#0d0d0d", borderTop:"1px solid #1a1a1a", padding:"5rem 1.5rem" }}>
-      <div style={{ maxWidth:1100, margin:"0 auto" }}>
-        <div className="reveal" style={{ display:"flex", alignItems:"flex-end", justifyContent:"space-between", marginBottom:"3rem", flexWrap:"wrap", gap:"1rem" }}>
-          <div>
-            <div style={{ fontFamily:F.ui, fontSize:"0.65rem", letterSpacing:"0.35em", textTransform:"uppercase", color:C.dim, marginBottom:"0.6rem", fontWeight:600 }}>Los Constructores</div>
-            <h2 style={{ fontFamily:F.display, fontSize:"clamp(2rem,5vw,4rem)", lineHeight:0.9 }}>THE BUILDERS.</h2>
-          </div>
-          <p style={{ maxWidth:380, fontFamily:F.body, fontSize:"0.92rem", lineHeight:1.7, color:C.dim }}>Four people. Four gifts. One field. The most powerful thing you can build is something your community actually needs.</p>
-        </div>
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:"1px", background:"#1a1a1a" }}>
-          {TEAM.map(m => (
-            <div key={m.name} className="tc" style={{ background:C.black, padding:"2rem 1.5rem", position:"relative", overflow:"hidden" }}>
-              <div className="bar" style={{ position:"absolute", bottom:0, left:0, right:0, height:2, background:m.color, transform:"scaleX(0)", transformOrigin:"left", transition:"transform .4s ease" }}/>
-              <span style={{ fontSize:"2rem", display:"block", marginBottom:"1.2rem" }}>{m.glyph}</span>
-              <div style={{ fontFamily:F.ui, fontSize:"0.6rem", letterSpacing:"0.3em", textTransform:"uppercase", color:m.color, fontWeight:700, marginBottom:"0.4rem" }}>{m.role}</div>
-              <h3 style={{ fontFamily:F.display, fontSize:"1.4rem", color:C.white, lineHeight:1, marginBottom:"0.8rem" }}>{m.name}</h3>
-              <p style={{ fontFamily:F.body, fontSize:"0.82rem", lineHeight:1.7, color:C.dim, marginBottom:"1rem" }}>{m.desc}</p>
-              <div style={{ fontFamily:F.ui, fontSize:"0.72rem", lineHeight:1.85, color:m.color, fontWeight:600, textTransform:"uppercase", letterSpacing:"0.05em", opacity:0.8, whiteSpace:"pre-line" }}>{m.gift}</div>
-            </div>
-          ))}
-        </div>
+<!-- TEAM -->
+<section id="team">
+  <div class="section-inner">
+    <div class="team-hdr reveal">
+      <div>
+        <div class="label" style="margin-bottom:.6rem">Los Constructores</div>
+        <h2 class="team-title">THE BUILDERS.</h2>
       </div>
-    </section>
-  );
-}
+      <p class="team-intro">Four people. Four gifts. One field. The most powerful thing you can build is something your community actually needs.</p>
+    </div>
+    <div class="team-cards" id="team-cards"></div>
+  </div>
+</section>
 
-function Phases() {
-  return (
-    <section id="phases" style={{ padding:"5rem 1.5rem", maxWidth:1100, margin:"0 auto" }}>
-      <div className="reveal" style={{ marginBottom:"3rem" }}>
-        <div style={{ fontFamily:F.ui, fontSize:"0.65rem", letterSpacing:"0.35em", textTransform:"uppercase", color:C.dim, marginBottom:"0.6rem", fontWeight:600 }}>La Hoja de Ruta / The Roadmap</div>
-        <h2 style={{ fontFamily:F.display, fontSize:"clamp(2rem,5vw,4rem)", lineHeight:0.9, marginBottom:"0.5rem" }}>THREE PHASES.</h2>
-        <p style={{ fontFamily:F.body, fontSize:"0.9rem", color:C.dim, lineHeight:1.6 }}>One trajectory. From a field in Fort Worth to a model communities can replicate and make their own.</p>
-      </div>
-      {PHASES.map((phase,pi) => (
-        <div key={phase.num} className="reveal" style={{ display:"grid", gridTemplateColumns:"140px 1fr", borderTop:"1px solid #1a1a1a", ...(pi===PHASES.length-1?{borderBottom:"1px solid #1a1a1a"}:{}) }}>
-          <div style={{ padding:"2rem 1rem 2rem 0", display:"flex", flexDirection:"column", justifyContent:"center", borderRight:"1px solid #1a1a1a" }}>
-            <div style={{ fontFamily:F.display, fontSize:"0.8rem", letterSpacing:"0.15em", color:phase.color }}>{phase.num}</div>
-            <div style={{ fontFamily:F.ui, fontSize:"0.6rem", letterSpacing:"0.2em", textTransform:"uppercase", color:C.dim, marginTop:"0.2rem", whiteSpace:"pre-line" }}>{phase.tag}</div>
-          </div>
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)" }}>
-            {phase.items.map((item,ii) => (
-              <div key={item.name} className="pi" style={{ padding:"2rem 1.5rem", borderRight:ii<2?"1px solid #1a1a1a":"none" }}>
-                <div style={{ fontFamily:F.ui, fontSize:"1rem", fontWeight:700, color:C.white, textTransform:"uppercase", letterSpacing:"0.05em", marginBottom:"0.5rem" }}>{item.name}</div>
-                <p style={{ fontFamily:F.body, fontSize:"0.8rem", color:C.dim, lineHeight:1.65 }}>{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      ))}
-    </section>
-  );
-}
+<hr class="divider">
 
-function Closing() {
-  return (
-    <section id="closing" style={{ background:C.red, padding:"6rem 1.5rem", textAlign:"center", position:"relative", overflow:"hidden" }}>
-      <div style={{ position:"absolute", top:"50%", left:"50%", transform:"translate(-50%,-50%)", fontFamily:F.display, fontSize:"40vw", color:"rgba(255,255,255,0.04)", pointerEvents:"none", lineHeight:1, userSelect:"none" }}>★</div>
-      <div className="reveal" style={{ maxWidth:800, margin:"0 auto", position:"relative", zIndex:1 }}>
-        <h2 style={{ fontFamily:F.display, fontSize:"clamp(2.5rem,6vw,5rem)", lineHeight:0.92, color:C.white, marginBottom:"1.2rem" }}>THE FIELD IS OURS.</h2>
-        <p style={{ fontFamily:F.ui, fontSize:"clamp(1.1rem,2.5vw,1.8rem)", fontStyle:"italic", color:"rgba(255,255,255,0.7)", marginBottom:"2.5rem", lineHeight:1.5, fontWeight:400 }}>
-          Bring your team or como solo.<br/>
-          1201 E Maddox Ave, Fort Worth, TX<br/>
-          Free Pickup — Viernes / Fridays 7PM
-        </p>
-        <div style={{ fontFamily:F.ui, fontSize:"0.7rem", letterSpacing:"0.3em", textTransform:"uppercase", color:"rgba(255,255,255,0.5)", lineHeight:2 }}>
-          Rebelz Fútbol Community ★ Fort Worth, Texas ★ Est. 2026<br/>
-          Season 1 Starts April 27, 2026 ★ 6 Weeks Before The World Cup
-        </div>
-      </div>
-    </section>
-  );
-}
+<!-- PHASES -->
+<section id="phases">
+  <div class="section-inner">
+    <div class="phases-hdr reveal">
+      <div class="label" style="margin-bottom:.6rem">La Hoja de Ruta / The Roadmap</div>
+      <h2 class="phases-title">THREE PHASES.</h2>
+      <p class="phases-sub">One trajectory. From a field in Fort Worth to a model communities can replicate and make their own.</p>
+    </div>
+    <div id="phases-list"></div>
+  </div>
+</section>
 
-function Footer() {
-  return (
-    <footer style={{ background:C.black, borderTop:"1px solid #1a1a1a", padding:"2rem 1.5rem", display:"flex", alignItems:"center", justifyContent:"space-between", flexWrap:"wrap", gap:"1rem" }}>
-      <div style={{ fontFamily:F.display, fontSize:"1rem", color:C.white, letterSpacing:"0.05em" }}>REBELZ<span style={{ color:C.red }}>★</span>FÚTBOL</div>
-      <div style={{ display:"flex", gap:"1.5rem" }}>
-        {[["Leagues","#how"],["Free Programs","#free"],["Mutual Aid","#fund"],["El Team","#team"]].map(([l,h]) =>
-          <a key={h} href={h} className="na" style={{ fontSize:"0.65rem" }}>{l}</a>
-        )}
-      </div>
-      <div style={{ fontFamily:F.ui, fontSize:"0.65rem", letterSpacing:"0.15em", color:C.dim, textTransform:"uppercase" }}>1201 E Maddox Ave · Fort Worth TX</div>
-    </footer>
-  );
-}
+<!-- CLOSING -->
+<section id="closing">
+  <div class="closing-inner reveal">
+    <h2 class="closing-title">THE FIELD IS OURS.</h2>
+    <p class="closing-sub">
+      Bring your team or como solo.<br>
+      1201 E Maddox Ave, Fort Worth, TX<br>
+      Free Pickup — Viernes / Fridays 7PM
+    </p>
+    <div class="closing-meta">
+      Rebelz Fútbol Community ★ Fort Worth, Texas ★ Est. 2026<br>
+      Season 1 Starts April 27, 2026 ★ 6 Weeks Before The World Cup
+    </div>
+  </div>
+</section>
 
-export default function RebelzFutbol() {
-  useReveal();
-  return (
-    <>
-      <style>{GLOBAL}</style>
-      <div style={{ background:C.black, color:C.white, minHeight:"100vh", overflowX:"hidden" }}>
-        <Nav />
-        <Hero />
-        <Ticker />
-        <Statement />
-        <div style={{ borderTop:"1px solid #1a1a1a" }} />
-        <HowWeDoIt />
-        <div style={{ borderTop:"1px solid #1a1a1a" }} />
-        <FreeSection />
-        <Fund />
-        <div style={{ borderTop:"1px solid #1a1a1a" }} />
-        <Team />
-        <div style={{ borderTop:"1px solid #1a1a1a" }} />
-        <Phases />
-        <Closing />
-        <Footer />
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">REBELZ<span>★</span>FÚTBOL</div>
+  <ul class="footer-links">
+    <li><a href="#how">Leagues</a></li>
+    <li><a href="#free">Free Programs</a></li>
+    <li><a href="#fund">Mutual Aid</a></li>
+    <li><a href="#team">El Team</a></li>
+  </ul>
+  <div class="footer-address">1201 E Maddox Ave · Fort Worth TX</div>
+</footer>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────
+const LEAGUES = [
+  { night:'MON', day:'Lunes',     name:"Men's 5v5 Futsal",      fee:'$65/player · 8 teams · 1 ref', annual:'$10,400 / yr', color:'#2a5298' },
+  { night:'TUE', day:'Martes',    name:'Coed 5v5 Futsal',        fee:'$65/player · 8 teams · 1 ref', annual:'$10,400 / yr', color:'#6b46c1' },
+  { night:'WED', day:'Miércoles', name:"Men's 5v5 Small Goals",  fee:'$65/player · 8 teams · 1 ref', annual:'$10,400 / yr', color:'#1a6635' },
+  { night:'THU', day:'Jueves',    name:'Cash Prize League',       fee:'$500/team · $3K prize · 2 refs',annual:'$4,000 net/yr',color:'#d4a520'},
+  { night:'FRI', day:'Viernes',   name:"Men's 5v5 Futsal",       fee:'$65/player · 8 teams · 1 ref', annual:'$14,560 / yr', color:'#d42b2b' },
+];
+
+const FREE_ITEMS = [
+  { icon:'⚽', title:'Free Pickup Fridays', body:'No sign-up. No fee. Show up and play. Friday 7PM. Forever.' },
+  { icon:'🩺', title:'Health Clinics',      body:'Free screenings, mental health access, body literacy. The field as healing.' },
+  { icon:'👟', title:'Youth Academy',        body:'Skills development. Coaching certs for community. No cost to participate.' },
+  { icon:'⬡',  title:'Mutual Aid Fund',     body:'Rent. Food. Emergency support. 10% of net profit. Back to the neighborhood.' },
+];
+
+const FUND_STATS = [
+  { num:'10%',       label:'Of Net Profit',  sub:'Set aside every season. No exceptions. Back into the community.' },
+  { num:'LLC+501c3', label:'Dual-Track',      sub:'Revenue arm funds free programming. Nonprofit arm protects the fund.' },
+  { num:'0',         label:'Gatekeepers',     sub:'Disbursement decisions made by the community members who need it most.' },
+];
+
+const TEAM = [
+  { glyph:'🌀', role:'Community Organizer',  name:'The Storyteller', color:'#d4a520',
+    desc:'Before you build anything, you must first listen. And listening is its own form of architecture.',
+    gift:'Gift: Makes people feel seen\nMove: Door knocks → manifestos' },
+  { glyph:'⚙️', role:'Math & Mechanics',     name:'The Wizard',      color:'#2a5298',
+    desc:'A heart rooted in love, a mind that sees systems — and builds them to free people, not constrain them.',
+    gift:'Gift: Makes complexity legible\nMove: Numbers → poems' },
+  { glyph:'🌿', role:'Architecture & Space', name:'The Dreamer',     color:'#1a6635',
+    desc:'Dreams of a world connected and thriving amongst nature. Every space is a decision that reveals what we value.',
+    gift:'Gift: Sees what could be\nMove: Blueprint → ecosystem' },
+  { glyph:'💊', role:'Health Justice',        name:'The Advocate',    color:'#d42b2b',
+    desc:'Knows healing happens in community, on fields, through joy. Holds the political and the personal at once.',
+    gift:'Gift: Political + personal\nMove: Clinic → commons' },
+];
+
+const PHASES = [
+  { num:'01', tag:'Foundation\n2026', color:'#d4a520', items:[
+    { name:'Weekday Leagues',      desc:'Mon–Fri, 7–11PM. Five nights, five formats. The revenue engine.' },
+    { name:'Free Pickup Fridays',  desc:'No registration. No fee. Cross-subsidized by league revenue.' },
+    { name:'Rebelz Health Clinic', desc:'Free screenings on-site. MD, RD, PT — community-embedded care.' },
+  ]},
+  { num:'02', tag:'Expansion\n2027', color:'#f0ece4', items:[
+    { name:'Weekend Divisions',    desc:'8AM–10PM Sat & Sun. Youth, women\'s, 40+, competitive open.' },
+    { name:'Mutual Aid Live',      desc:'Fund fully operational. Money flowing back to the neighborhood.' },
+    { name:'Gym & Membership',     desc:'Access, jerseys, exclusive classes, seasonal tournaments.' },
+  ]},
+  { num:'03', tag:'Legacy\n2028+',   color:'#d42b2b', items:[
+    { name:'Youth Academy',        desc:'Skills development. Coaching certs. Pathways that didn\'t exist.' },
+    { name:'Physical Facility',    desc:'A permanent home. Bodega, café, community space, field.' },
+    { name:'Replicable Model',     desc:'Open-source tools to help other communities build this too.' },
+  ]},
+];
+
+// ── RENDER ────────────────────────────────────────────────────
+
+// Ticker
+const tickerWords = ['FREE 4 EVERYONE','RETAS PARA TODOS','COMMUNITY FIRST','LA COMUNIDAD PRIMERO','BRING YOUR TEAM OR COMO SOLO','FORT WORTH FÚTBOL'];
+const tickerEl = document.getElementById('ticker');
+[...tickerWords, ...tickerWords].forEach(word => {
+  tickerEl.innerHTML += `<span class="ticker-item">${word} <span class="ticker-sep">★</span></span>`;
+});
+
+// Revenue grid
+const revGrid = document.getElementById('rev-grid');
+LEAGUES.forEach(l => {
+  revGrid.innerHTML += `
+    <div class="rev-block">
+      <div class="rev-bar" style="background:${l.color}"></div>
+      <div class="rev-night" style="color:${l.color}">${l.night}</div>
+      <div class="rev-day">${l.day}</div>
+      <div class="rev-name">${l.name}</div>
+      <div class="rev-fee">${l.fee}</div>
+      <div class="rev-annual" style="color:${l.color}">${l.annual}</div>
+    </div>`;
+});
+
+// Free cards
+const freeCards = document.getElementById('free-cards');
+FREE_ITEMS.forEach(item => {
+  freeCards.innerHTML += `
+    <div class="free-card">
+      <span class="free-icon">${item.icon}</span>
+      <div class="free-card-title">${item.title}</div>
+      <p class="free-card-body">${item.body}</p>
+    </div>`;
+});
+
+// Fund stats
+const fundStats = document.getElementById('fund-stats');
+FUND_STATS.forEach(s => {
+  fundStats.innerHTML += `
+    <div class="fund-stat">
+      <div class="fs-num">${s.num}</div>
+      <div class="fs-label">${s.label}</div>
+      <div class="fs-sub">${s.sub}</div>
+    </div>`;
+});
+
+// Team cards
+const teamCards = document.getElementById('team-cards');
+TEAM.forEach(m => {
+  teamCards.innerHTML += `
+    <div class="tc">
+      <div class="tc-bar" style="background:${m.color}"></div>
+      <span class="tc-glyph">${m.glyph}</span>
+      <div class="tc-role" style="color:${m.color}">${m.role}</div>
+      <h3 class="tc-name">${m.name}</h3>
+      <p class="tc-desc">${m.desc}</p>
+      <div class="tc-gift" style="color:${m.color}">${m.gift}</div>
+    </div>`;
+});
+
+// Phases
+const phasesList = document.getElementById('phases-list');
+PHASES.forEach(phase => {
+  const items = phase.items.map((item, i) => `
+    <div class="pi" ${i === phase.items.length-1 ? 'style="border-right:none"' : ''}>
+      <div class="pi-name">${item.name}</div>
+      <p class="pi-desc">${item.desc}</p>
+    </div>`).join('');
+  phasesList.innerHTML += `
+    <div class="phase-row reveal">
+      <div class="phase-num-col">
+        <div class="phase-num" style="color:${phase.color}">${phase.num}</div>
+        <div class="phase-tag">${phase.tag}</div>
       </div>
-    </>
-  );
-}
+      <div class="phase-items">${items}</div>
+    </div>`;
+});
+
+// ── SCROLL REVEAL ─────────────────────────────────────────────
+const obs = new IntersectionObserver(
+  entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); }),
+  { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+);
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
